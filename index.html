@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.E.R.E.N.A. — Presentazione di laurea</title>
+<style>
+  :root{
+    --bg:#faf4e8;
+    --surface:#fffdf6;
+    --ink:#2e2118;
+    --ink-soft:#63544a;
+    --red:#9e1b28;
+    --red-deep:#7c1420;
+    --red-soft:#f6e2df;
+    --gold:#a97e1c;
+    --gold-bright:#c9971f;
+    --gold-soft:#f5ead0;
+    --line:#e6dbc6;
+    --shadow:0 8px 26px rgba(90,50,20,.10);
+    --radius:14px;
+    --ease-out:cubic-bezier(.16,1,.3,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden;background:var(--bg);font-family:"Segoe UI",system-ui,-apple-system,sans-serif;color:var(--ink)}
+
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  #deck{width:1280px;height:720px;flex:0 0 auto;position:relative;transform-origin:center center}
+
+  .slide{position:absolute;inset:0;padding:38px 58px 42px;display:none;flex-direction:column;background:var(--bg);isolation:isolate}
+  .slide.active{display:flex;animation:slidein .55s var(--ease-out)}
+  @keyframes slidein{from{opacity:0;transform:translateX(calc(34px * var(--dir,1)))}to{opacity:1;transform:none}}
+
+  /* soft decorative glows, behind the content */
+  .slide::before{content:"";position:absolute;top:-150px;right:-150px;width:500px;height:500px;border-radius:50%;
+    background:radial-gradient(circle,rgba(201,151,31,.12),transparent 65%);pointer-events:none;z-index:-1}
+  .slide::after{content:"";position:absolute;bottom:-170px;left:-170px;width:540px;height:540px;border-radius:50%;
+    background:radial-gradient(circle,rgba(158,27,40,.07),transparent 65%);pointer-events:none;z-index:-1}
+
+  /* ---------- fragments ---------- */
+  .frag{opacity:0;transform:translateY(18px);transition:opacity .55s var(--ease-out),transform .55s var(--ease-out)}
+  .frag.on{opacity:1;transform:none}
+
+  /* ---------- typography ---------- */
+  .kicker{font-size:13.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+  .slide>.kicker{display:flex;align-items:center;gap:10px}
+  .slide>.kicker::before{content:"";width:30px;height:2px;background:linear-gradient(90deg,var(--gold-bright),var(--red));border-radius:2px}
+  h1{font-family:Georgia,"Times New Roman",serif;font-size:88px;line-height:1.02;font-weight:700;letter-spacing:-.01em;color:var(--red)}
+  h2{font-family:Georgia,"Times New Roman",serif;font-size:31px;line-height:1.1;font-weight:700;color:var(--red-deep);margin-bottom:14px}
+  h3{font-size:16.5px;font-weight:700}
+  p,li{font-size:15.5px;line-height:1.42;color:var(--ink-soft)}
+  strong{color:var(--ink)}
+  .accent{color:var(--red)}
+  .goldtx{color:var(--gold)}
+  .small{font-size:13px;color:var(--ink-soft)}
+
+  /* ---------- layout ---------- */
+  .grow{flex:1;min-height:0}
+  .cols{display:flex;gap:20px;flex:1;min-height:0}
+  .col{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;gap:12px}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:13px 17px;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+  .card h3{margin-bottom:5px;font-size:17.5px}
+  .card p{font-size:14.5px;line-height:1.45}
+  .icard .ico{font-size:42px;line-height:1;margin-bottom:8px}
+  .col>.pill{align-self:center}
+
+  .pill{display:inline-block;background:var(--red-soft);color:var(--red);font-size:12.5px;font-weight:700;padding:2px 12px;border-radius:999px;margin-bottom:6px}
+  .pill.warm{background:var(--gold-soft);color:var(--gold)}
+
+  .imgbox{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0;overflow:hidden}
+  .imgbox img{flex:1 1 0;min-height:0;max-width:100%;object-fit:contain;border-radius:6px}
+  .imgbox .cap{flex:0 0 auto;font-size:12.5px;line-height:1.35;color:var(--ink-soft);margin-top:7px;text-align:center}
+
+  ul.clean{list-style:none}
+  ul.clean li{position:relative;padding-left:24px;margin-bottom:8px}
+  ul.clean li::before{content:"";position:absolute;left:1px;top:15px;width:9px;height:9px;border-radius:50%;background:var(--gold-bright)}
+  ul.key li{font-size:18px;margin-bottom:16px;padding-left:0}
+  ul.key li::before{display:none}
+
+  .num{font-family:Georgia,"Times New Roman",serif;font-size:30px;font-weight:700;color:var(--red);line-height:1}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:11px 13px;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}
+  .stat .lbl{font-size:13px;line-height:1.35;color:var(--ink-soft);margin-top:4px}
+
+  /* questionari finali */
+  .survey-slide{padding:34px 50px 38px}
+  .survey-slide h2{font-size:29px;margin-bottom:11px}
+  .survey-grid{flex:1;min-height:0;display:grid;gap:12px}
+  .survey-grid.nine{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) 218px}
+  .survey-grid.ten{grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr) auto}
+  .survey-main-column{display:grid;grid-template-rows:minmax(0,.82fr) minmax(0,.9fr);gap:12px;min-width:0;min-height:0}
+  .survey-index-column{display:grid;grid-template-rows:minmax(0,1fr) minmax(0,1fr) 92px;gap:10px;min-width:0;min-height:0}
+  .survey-violin-row{display:grid;grid-template-columns:1.45fr 1fr 1fr;gap:12px;min-height:0}
+  .survey-violin-row .imgbox{height:100%}
+  .survey-violin-row .imgbox img{width:100%;height:100%;object-fit:contain}
+  .survey-choice-row{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:12px;min-height:0}
+  .survey-visual-row{display:grid;grid-template-columns:1.5fr .78fr .78fr;gap:12px;min-height:0}
+  .imgbox.compact{padding:7px;border-radius:12px}
+  .imgbox.compact .cap{font-size:10.9px;line-height:1.25;margin-top:5px}
+  .index-plot img{width:100%;height:100%;object-fit:contain}
+  .survey-bottom{display:grid;grid-template-columns:1.32fr .88fr;gap:12px;min-height:0}
+  .choice-panel,.survey-evidence,.ten-summary{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:10px;min-width:0;min-height:0}
+  .choice-panel{display:flex;flex-direction:column;gap:4px}
+  .choice-title{font-size:12px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--gold);line-height:1.1}
+  .choice-panel .chart-wrap{flex:1;min-height:0}
+  .choice-panel.nine-choice{padding:10px 14px 8px}
+  .choice-panel.nine-choice .chart-wrap{flex:1 1 0}
+  .choice-foot{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:18px;color:var(--ink-soft);font-size:1.2rem;font-weight:650;line-height:1}
+  .choice-foot-legend{display:flex;align-items:center;gap:13px}
+  .choice-key{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+  .choice-key::before{content:"";width:16px;height:11px;border-radius:2px;background:var(--key-color);box-shadow:inset 0 0 0 1px rgba(255,253,246,.65)}
+  .choice-panel.centered-chart{justify-content:center}
+  .choice-panel.centered-chart .choice-title{flex:0 0 auto}
+  .choice-panel.centered-chart .chart-wrap{flex:0 0 350px;width:min(100%,620px);align-self:center;margin:auto 0}
+  .survey-evidence{display:flex;align-items:center}
+  .index-legend{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;font-size:10.8px;line-height:1.18;color:var(--ink-soft)}
+  .index-legend b{display:block;color:var(--red);font-size:11.8px}
+  .survey-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .survey-evidence .survey-stats{width:100%}
+  .survey-stats .stat{padding:5px 6px;border-radius:11px}
+  .survey-stats .num{font-size:17.5px}
+  .survey-stats .lbl{font-size:9.8px;line-height:1.1}
+  .survey-side-stats{display:grid;grid-template-rows:1fr 1fr;gap:12px;min-width:0;min-height:0}
+  .survey-side-stats .stat{padding:10px 12px}
+  .survey-side-stats .num{font-size:1.45rem}
+  .survey-evidence ul.clean{align-self:center}
+  .survey-evidence ul.clean li{font-size:12.8px;line-height:1.3;margin-bottom:5px;padding-left:17px}
+  .survey-evidence ul.clean li::before{top:5px;width:7px;height:7px}
+  .vti-panel{min-width:0;min-height:0;padding:4px 8px 6px}
+  .vti-panel img{width:100%;height:100%;max-height:none;object-fit:contain}
+  .ten-summary{grid-column:1 / -1;display:flex; justify-content: center;  grid-template-columns:.86fr .86fr 1.28fr;gap:10px;align-items:stretch;padding:10px}
+  .ten-summary .stat{box-shadow:none;background:var(--gold-soft);border-radius:11px; margin: 0 10px 0 10px;}
+  .ten-summary ul.clean{align-self:center}
+  .ten-summary ul.clean li{font-size:13px;line-height:1.28;margin-bottom:4px;padding-left:18px}
+  .ten-summary ul.clean li::before{top:5px;width:7px;height:7px}
+
+  table{border-collapse:collapse;width:100%;background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+  th,td{padding:8px 10px;font-size:14px;text-align:center;border-bottom:1px solid var(--line)}
+  th{background:var(--gold-soft);font-weight:700;color:var(--ink)}
+  td:first-child,th:first-child{text-align:left;font-weight:600}
+  tr.hl{background:var(--red-soft)}
+  tr.hl td{font-weight:700;color:var(--red)}
+  tr.dim td{color:#a89a8b}
+  table.compact th,table.compact td{padding:4.5px 7px;font-size:11.5px;line-height:1.15}
+
+  /* indici riassuntivi (solo nome + valore) */
+  .idxrow{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;flex:0 0 auto}
+  .idx{flex:1 1 29%;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:7px 6px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .idx-v{font-family:Georgia,"Times New Roman",serif;font-size:19px;font-weight:700;color:var(--red);line-height:1}
+  .idx-n{font-size:10.5px;color:var(--ink-soft);margin-top:3px;line-height:1.2}
+
+  .formula{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--red);border-radius:10px;padding:13px 18px;font-size:20px;font-family:Cambria,Georgia,serif;box-shadow:var(--shadow);text-align:center}
+  .formula sub{font-size:.68em}
+
+  .rule{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:9px 14px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:3px}
+  .rule .nm{font-weight:700;font-size:15.5px;color:var(--ink)}
+  .rule .fx{font-family:Cambria,Georgia,serif;font-size:16px;color:var(--ink-soft)}
+  .rule.win{border-left:5px solid var(--gold-bright);background:var(--gold-soft)}
+
+  .subhead{flex:0 0 auto;font-family:Georgia,"Times New Roman",serif;font-size:19px;font-weight:700;color:var(--gold);line-height:1.15;padding-bottom:2px}
+
+  .hp{flex:1;aspect-ratio:1;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:6px}
+  .hp-sym{font-family:Georgia,"Times New Roman",serif;font-size:23px;font-weight:700;color:var(--red);line-height:1}
+  .hp-sym sub{font-size:.62em}
+  .hp-nm{font-size:12.5px;font-weight:700;color:var(--ink);margin-top:5px}
+  .hp-gr{font-size:11px;color:var(--ink-soft);margin-top:3px}
+
+  /* staggered reveal per le regole dei positivi (frag contenitore: solo i figli animano, a scaletta) */
+  .reveal-rules{opacity:1;transform:none}
+  .reveal-rules>*{opacity:0;transform:translateY(16px) scale(.97);transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+  .reveal-rules.on>*{opacity:1;transform:none}
+  .reveal-rules.on>*:nth-child(2){transition-delay:.10s}
+  .reveal-rules.on>*:nth-child(3){transition-delay:.22s}
+  .reveal-rules.on>*:nth-child(4){transition-delay:.34s}
+
+  .tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow);text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}
+  .tile .ico{font-size:36px;line-height:1.15}
+  .ico{color:var(--red);display:flex;align-items:center;justify-content:center}
+  .ico svg{width:1em;height:1em;display:block;fill:currentColor}
+  .tile h3{font-size:16px;margin-top:6px}
+  .tile p{font-size:13px;line-height:1.4;margin-top:3px}
+  .dash{width:30px;height:3px;background:linear-gradient(90deg,var(--gold-bright),var(--red));border-radius:2px;margin-bottom:4px}
+
+  .eval-panel[data-eval-panel="0"] th,
+  .eval-panel[data-eval-panel="0"] td {
+    font-size: 1.5rem;
+  }
+  .serena-layout{display:grid;grid-template-columns:34% 1fr;gap:24px;flex:1;min-height:0}
+  .serena-visuals{min-height:0;display:flex;flex-direction:column;gap:8px}
+  .serena-visuals img{width:100%;min-height:0;object-fit:contain;border-radius:8px;filter:drop-shadow(0 7px 16px rgba(90,50,20,.14))}
+  .serena-visuals .marta-view{min-height:0}
+  .serena-visuals .cap{flex:0 0 auto;font-size:12.5px;line-height:1.25;color:var(--ink-soft);text-align:center}
+  .serena-right{min-height:0;display:flex;flex-direction:column;gap:6px;justify-content:center}
+  .serena-right .timeline{flex:0 0 auto;min-height:0}
+  .ingredient-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;flex:0 0 auto}
+  .ingredient{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:8px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+  .ingredient .dash{margin:0}
+  .ingredient h3{font-size:12.5px;line-height:1.15}
+
+  /* verdict dots (esiti del provino) */
+  .vdot{display:inline-block;width:13px;height:13px;border-radius:50%;margin-right:9px}
+  .vdot.ok{background:var(--gold-bright)}
+  .vdot.mid{background:linear-gradient(90deg,var(--gold-bright) 50%,var(--gold-soft) 50%);border:1px solid var(--gold)}
+  .vdot.ko{background:var(--red)}
+
+  /* timeline */
+  .timeline{display:flex;align-items:flex-start;gap:0;position:relative;padding:18px 0 6px}
+  .tstep{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:1}
+  .tstep .dot{width:86px;height:86px;border-radius:50%;background:var(--surface);border:3px solid var(--red);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;font-size:40px;color:var(--red)}
+  .tstep .word{margin-top:10px;font-weight:700;font-size:15.5px;color:var(--ink)}
+  .tstep .sub{font-size:12.5px;color:var(--ink-soft);margin-top:2px}
+  .timeline::before{content:"";position:absolute;top:61px;left:6%;right:6%;height:4px;background:linear-gradient(90deg,var(--gold-bright),var(--red));border-radius:2px}
+  /* dots shade from gold to red, following the line */
+  .tstep:nth-child(1) .dot{border-color:#c9971f;color:#a97e1c}
+  .tstep:nth-child(2) .dot{border-color:#c2831f;color:#a3721c}
+  .tstep:nth-child(3) .dot{border-color:#b96b20;color:#9c611e}
+  .tstep:nth-child(4) .dot{border-color:#ad5322;color:#964d21}
+  .tstep:nth-child(5) .dot{border-color:#a63d25;color:#8f3a23}
+  .tstep:nth-child(6) .dot{border-color:#a12b27;color:#882826}
+  .tstep:nth-child(7) .dot{border-color:#9e1b28;color:#7c1420}
+  .timeline.serena-loop{width:100%;justify-content:space-between;gap:20px;padding:22px 10px 20px;margin-top:2px}
+  .timeline.serena-loop::before{top:59px;left:8%;right:8%;height:3px}
+  .timeline.serena-loop .tstep{flex:0 0 auto;width:112px}
+  .timeline.serena-loop .tstep .dot{width:78px;height:78px;font-size:34px;border-width:2.5px}
+  .timeline.serena-loop .tstep .word{margin-top:8px;font-size:13.5px}
+  .timeline.serena-loop .tstep .sub{font-size:11.3px;line-height:1.15;max-width:92px}
+  .tstep .dot svg{width:42%;height:42%;fill:currentColor}
+
+  /* macro-flow: pipeline sperimentale (protocollo within-subject) */
+  .timeline.macro-flow{padding:14px 0 4px}
+  .timeline.macro-flow::before{top:62px}
+  .timeline.macro-flow .tstep{padding:0 8px}
+  .timeline.macro-flow .tstep .dot{width:96px;height:96px}
+  .timeline.macro-flow .tstep .word{margin-top:9px;font-size:15.5px;letter-spacing:0;text-transform:none;line-height:1.08;max-width:122px}
+  .timeline.macro-flow .tstep .sub{font-size:12px}
+  .micro-panel{position:relative;margin-top:46px;background:var(--surface);border:1px dashed var(--line);border-radius:var(--radius);padding:10px 14px 0;display:flex;flex-direction:column;align-items:center;gap:0}
+  /* connettore dal nodo Provino allo schema di dettaglio */
+  .provino-link{position:absolute;left:10%;top:-44px;transform:translateX(-50%);width:26px;height:46px;color:var(--gold-bright);z-index:4;pointer-events:none}
+  .provino-link svg{width:100%;height:100%;display:block;overflow:visible;fill:currentColor}
+
+  /* ---------- stepper + stage (slide contesto) ---------- */
+  .ctx-cols{align-items:stretch}
+  .ctx-left{flex:0 0 30%;justify-content:flex-start}
+  .ctx-left .kicker{display:flex;align-items:center;gap:10px}
+  .ctx-left .kicker::before{content:"";width:30px;height:2px;background:linear-gradient(90deg,var(--gold-bright),var(--red));border-radius:2px}
+  .stepper{display:flex;flex-direction:column;flex:1;min-height:0;justify-content:space-between;gap:0}
+  .step{display:flex;align-items:center;gap:16px;padding:15px 20px;border-radius:12px;border:1px solid var(--line);background:var(--surface);opacity:.45;filter:grayscale(40%);box-shadow:none;transition:opacity .45s var(--ease-out),filter .45s var(--ease-out),border-color .45s,box-shadow .45s,background .45s}
+  .step .step-dot{flex:0 0 auto;width:15px;height:15px;border-radius:50%;border:2px solid var(--ink-soft);background:transparent;transition:all .45s var(--ease-out)}
+  .step h3{font-size:17.5px;color:var(--ink);transition:color .45s}
+  .step.active{opacity:1;filter:none;border-color:var(--gold-bright);box-shadow:var(--shadow);background:var(--gold-soft)}
+  .step.active .step-dot{border-color:var(--red);background:var(--red)}
+  .step.done{opacity:.82;filter:none;border-color:var(--line);background:var(--surface)}
+  .step.done .step-dot{border-color:var(--gold-bright);background:var(--gold-bright)}
+
+  .stage{position:relative;flex:1;min-height:0}
+  .stage-panel{position:absolute;inset:0;opacity:0;transform:none!important;pointer-events:none;transition:opacity .5s var(--ease-out);display:flex;flex-direction:column;gap:9px;overflow:hidden}
+  .stage-panel.current{opacity:1;pointer-events:auto}
+  .stage-panel.on:not(.current){opacity:0!important;pointer-events:none}
+
+  /* media images (step "umani virtuali") — trasparenti, stessa altezza */
+  .media-img{height:210px;width:auto;max-width:100%;object-fit:contain;border-radius:10px;filter:drop-shadow(0 7px 16px rgba(90,50,20,.16))}
+  .media-title{flex:0 0 auto;font-family:Georgia,"Times New Roman",serif;font-size:22px;font-weight:700;color:var(--red-deep)}
+
+  /* umani virtuali — 3 immagini sparse con titolo */
+  .vr-scatter{position:relative;flex:1;min-height:0}
+  .vr-item{position:absolute;display:flex;flex-direction:column;align-items:center;gap:7px}
+  .vr-item img{width:100%;height:auto;object-fit:contain;border-radius:10px;filter:drop-shadow(0 8px 18px rgba(90,50,20,.20))}
+  .vr-item .media-title{font-size:19px}
+  .vr-g{width:39%;top:3%;left:0;transform:rotate(-3deg)}
+  .vr-s{width:35%;top:1%;right:0;transform:rotate(3deg)}
+  .vr-i{width:41%;left:30%;bottom:2%;transform:rotate(-2deg)}
+
+  /* pipeline (slide 4) — titolo sopra ogni pannello, stessa altezza */
+  .panel-title{flex:0 0 auto;height:46px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;margin-bottom:6px}
+  .panel-title .num{font-size:17px}
+  .chart-wrap{flex:1;min-height:0;position:relative;width:100%}
+
+  /* radici — immagine alta, card+titoli in colonna affiancata */
+  .radici-img{flex:0 0 auto;height:100%;width:auto;max-width:44%;object-fit:contain;border-radius:var(--radius);filter:drop-shadow(0 7px 16px rgba(90,50,20,.16))}
+
+  /* scattered images (step "modello emotivo") */
+  .scatter{position:relative;flex:1;min-height:0}
+  .scatter .sc{position:absolute;filter:drop-shadow(0 7px 16px rgba(90,50,20,.18));border-radius:8px}
+  .scatter .sc-ekman{width:42%;top:9%;left:0;transform:rotate(-3deg)}
+  .scatter .sc-big5{width:35%;top:5%;right:0;transform:rotate(4deg)}
+  .scatter .sc-plut{width:70%;bottom:2%;left:13%;transform:rotate(-1.5deg)}
+  .sc-tag{position:absolute;z-index:6;font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;padding:3px 13px;border-radius:999px;box-shadow:var(--shadow)}
+  .sc-tag-cat{background:var(--red-soft);color:var(--red);top:0;left:50%;transform:translateX(-50%)}
+  .sc-tag-cont{background:var(--gold-soft);color:var(--gold);bottom:0;left:0}
+
+  /* channel grid (step "canali emotivi") — 3 sopra, 2 sotto */
+  .channel-grid{display:flex;flex-direction:column;gap:12px;flex:1;min-height:0;margin-top:2px}
+  .crow{display:flex;gap:12px;justify-content:center;flex:1;min-height:0}
+  .crow .chan{flex:0 1 32%}
+  .chan .ico{font-size:36px}
+  .chan h3{font-size:20px;margin-top:6px}
+  .chan p{font-size:13px;margin-top:3px}
+  .voce-trigger{display:none}
+  .voce-tile{transition:background .4s var(--ease-out),border-color .4s var(--ease-out),box-shadow .4s var(--ease-out)}
+  .voce-trigger.on ~ .channel-grid .voce-tile{border-color:var(--red);background:var(--red-soft);box-shadow:var(--shadow)}
+  .voce-trigger.on ~ .channel-grid .voce-tile h3{color:var(--red)}
+
+  /* analisi valutazioni */
+  .analysis-slide{padding:34px 52px 38px}
+  .analysis-slide h2{font-size:34px;margin-bottom:10px}
+  .analysis-tabs{display:flex;justify-content:space-between;gap:12px;flex:0 0 auto;margin:0 0 14px}
+  .analysis-card{flex:1;min-width:0;background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:10px 8px;box-shadow:var(--shadow);text-align:center;transition:transform .38s var(--ease-out),border-color .38s var(--ease-out),background .38s var(--ease-out),box-shadow .38s var(--ease-out)}
+  .analysis-card .tag{font-size:11.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--red)}
+  .analysis-card .hint{font-size:10.7px;color:var(--ink-soft);line-height:1.2;margin-top:3px}
+  .analysis-card.active{border-color:var(--gold-bright);background:var(--gold-soft);transform:translateY(-3px);box-shadow:0 12px 30px rgba(169,126,28,.22)}
+  .eval-trigger{display:none}
+  .analysis-body{position:relative;flex:1;min-height:0;overflow:hidden}
+  .eval-panel{position:absolute;inset:0;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .45s var(--ease-out),transform .45s var(--ease-out);display:grid;gap:14px}
+  .eval-panel.current{opacity:1;transform:none;pointer-events:auto}
+  .eval-panel.two-col{grid-template-columns:1.18fr .82fr}
+  .eval-panel.equal-col{grid-template-columns:1fr 1fr}
+  .eval-panel.wide-top{grid-template-rows:minmax(0,1fr) auto}
+  .analysis-media,.analysis-chart-frame,.insight-panel{min-height:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+  .analysis-media img{width:100%;height:100%;min-height:0;object-fit:contain;border-radius:6px}
+  .analysis-media .cap{font-size:11.8px;line-height:1.25;color:var(--ink-soft);text-align:center;margin-top:5px}
+  .analysis-chart-frame{padding:12px 14px}
+  .analysis-chart-frame .chart-wrap{width:100%;height:100%;min-height:0}
+  .insight-panel{align-items:stretch;justify-content:flex-start;gap:10px;padding:13px 15px}
+  .metric-strip{display:flex;gap:9px;flex:0 0 auto}
+  .metric{flex:1;min-width:0;display: flex; justify-content: center; flex-direction: column; background:rgba(255,253,246,.76);border:1px solid var(--line);border-radius:10px;padding:8px 7px;text-align:center}
+  .metric strong{display:block;font-family:Georgia,"Times New Roman",serif;font-size:21px;line-height:1;color:var(--red)}
+  .metric span{display:block;font-size:10.8px;line-height:1.2;color:var(--ink-soft);margin-top:4px}
+  .insight-panel ul.clean li{font-size:13.8px;margin-bottom:6px;padding-left:19px}
+  .insight-panel ul.clean li::before{top:6px;width:7px;height:7px}
+  .panel-kicker{font-size:11.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:2px}
+  .panel-title-small{font-family:Georgia,"Times New Roman",serif;font-size:20px;font-weight:700;color:var(--red-deep);line-height:1.1}
+  .mini-compare{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+  .mini-compare .metric{background:var(--gold-soft)}
+  .image-pair{display:grid;grid-template-columns:1fr 1fr;gap:5px;min-height:0}
+  .image-pair .analysis-media{min-height:0}
+  .eval-panel.info-column{grid-template-columns:minmax(0,1fr) 220px;grid-template-rows:minmax(0,1fr)}
+  .eval-panel.info-column .analysis-media,
+  .eval-panel.info-column .analysis-chart-frame,
+  .eval-panel.info-column .image-pair{min-height:0;height:100%}
+  .eval-panel.info-column .insight-panel{display:flex!important;flex-direction:column;align-items:stretch;justify-content:space-evenly!important;padding:12px 10px}
+  .eval-panel.info-column .metric-strip,
+  .eval-panel.info-column .mini-compare{display:flex;flex:1;flex-direction:column;justify-content:space-evenly;gap:10px}
+  .eval-panel.info-column .metric{flex:0 0 auto;padding:12px 8px}
+  .eval-panel.info-column .analysis-media.focus-media img{transform:scale(1.08)}
+  .eval-panel.info-column .image-pair .analysis-media.focus-media img{transform:scale(1.04)}
+  .eval-panel.similarity-row{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}
+  .eval-panel.similarity-row .insight-panel{padding:10px 12px}
+  .eval-panel.similarity-row .mini-compare{grid-template-columns:repeat(3,1fr)}
+  .eval-panel.single-multi-panel{grid-template-columns:250px minmax(0,1fr);grid-template-rows:minmax(0,1fr)}
+  .single-multi-panel .insight-panel{display:flex;flex-direction:column;align-items:stretch;justify-content:space-evenly;padding:14px 12px}
+  .single-multi-panel .metric-strip{display:flex;flex:1;flex-direction:column;justify-content:space-evenly;gap:10px}
+  .single-multi-panel .image-pair{height:100%}
+  .single-multi-panel .image-pair{transition:grid-template-columns .6s var(--ease-out)}
+  .single-multi-panel.current .image-pair{grid-template-columns:3fr 1fr}
+  .single-multi-panel.current.zoom-second .image-pair{grid-template-columns:1fr 3fr}
+  .gain-badge{background:var(--red-soft);border:1px solid rgba(158,27,40,.18);border-left:5px solid var(--red);border-radius:12px;padding:11px 13px}
+  .gain-badge h3{font-size:16px;color:var(--red);margin-bottom:3px}
+  .gain-badge p{font-size:13.2px;line-height:1.35}
+
+  /* slide modello a pannelli */
+  .model-slide .analysis-tabs{gap:14px;margin-bottom:12px}
+  .model-slide .analysis-card{padding:12px 10px}
+  .model-table-panel{grid-template-rows:minmax(0,1fr) auto}
+  .model-table-wrap{min-height:0;overflow:hidden;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+  .model-table{height:100%;box-shadow:none;border-radius:12px}
+  .model-table th,.model-table td{font-size:1.2rem;line-height:1.1;padding:6px 8px}
+  .model-table th:nth-child(2),.model-table td:nth-child(2){text-align:left}
+  .model-kpis{gap:10px}
+  .model-kpis .idx{padding:10px 8px}
+  .model-insight{display:grid;grid-template-columns:.9fr 1.1fr;align-items:center}
+  .model-slide .eval-panel.info-column .analysis-media.focus-media img{transform:scale(1)}
+
+  /* leggibilità minima */
+  :root{--min-readable:1.2rem}
+  .imgbox .cap,.analysis-media .cap{display:none}
+  .analysis-card .hint{display:none}
+  #deck :is(.kicker,h3,p,li,.small,.pill,.lbl,.stat .lbl,th,td,.idx-n,.rule .nm,.rule .fx,.subhead,.hp-nm,.hp-gr,.tile p,.ingredient h3,.tstep .word,.tstep .sub,.step h3,.media-title,.sc-tag,.chan p,.analysis-card .tag,.metric span,.insight-panel ul.clean li,.panel-kicker,.gain-badge p,.rq-answer h3,.rq-answer p,.future-item h3,.future-item p,.choice-title,.index-legend,.index-legend b,.survey-stats .lbl,.survey-evidence ul.clean li,.ten-summary ul.clean li,.panel-title .num,.serena-visuals .cap,#counter,#hint){
+    font-size:var(--min-readable)
+  }
+  #deck [style*="font-size:10"],
+  #deck [style*="font-size:11"],
+  #deck [style*="font-size:12"],
+  #deck [style*="font-size:13"],
+  #deck [style*="font-size:14"],
+  #deck [style*="font-size:15"],
+  #deck [style*="font-size:16"],
+  #deck [style*="font-size:17"],
+  #deck [style*="font-size:18"]{
+    font-size:var(--min-readable)!important
+  }
+  #deck sub,#deck sup{font-size:var(--min-readable)}
+  #deck :is(.idx-v,.survey-stats .num){font-size:1.3rem}
+
+  /* conclusioni accorpate */
+  .closing-layout{display:grid;grid-template-columns:.94fr 1.06fr;gap:22px;flex:1;min-height:0}
+  .rq-column{position:relative;display:flex;flex-direction:column;gap:8px;padding-right:18px}
+  .rq-column::after{content:"";position:absolute;top:2px;right:0;bottom:2px;width:3px;background:linear-gradient(180deg,var(--red),var(--gold-bright));border-radius:2px}
+  .rq-answer{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:10px;box-shadow:var(--shadow);padding:9px 12px}
+  .rq-answer h3{font-size:14.3px;margin-bottom:2px}
+  .rq-answer p{font-size:12.8px;line-height:1.28}
+  .future-side{display:grid;grid-template-rows:1fr 1fr;gap:14px;min-height:0}
+  .future-block{position:relative;background:linear-gradient(135deg,rgba(255,253,246,.96),rgba(245,234,208,.62));border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:15px 16px 13px;overflow:hidden}
+  .future-block::before{content:"";position:absolute;inset:0 auto 0 0;width:6px;background:linear-gradient(180deg,var(--gold-bright),var(--red))}
+  .future-block .pill{margin-bottom:7px}
+  .future-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;height:calc(100% - 34px)}
+  .future-item{min-width:0;background:rgba(255,253,246,.78);border:1px solid var(--line);border-radius:10px;padding:9px 8px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:6px}
+  .future-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--red-soft);color:var(--red);box-shadow:0 5px 14px rgba(90,50,20,.08)}
+  .future-icon.app{background:var(--gold-soft);color:var(--gold)}
+  .future-icon svg{width:20px;height:20px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .future-item h3{font-size:13.8px;line-height:1.3;margin-bottom:4px;color:var(--ink)}
+  .future-item p{font-size:11.4px;line-height:1.26}
+
+  /* ---------- chrome ---------- */
+  #bar{position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,var(--red),var(--gold-bright));width:0;transition:width .25s ease;z-index:10}
+  #counter{position:fixed;bottom:14px;right:20px;font-size:13px;color:var(--ink-soft);z-index:10;background:rgba(255,253,246,.85);padding:3px 12px;border-radius:999px;border:1px solid var(--line)}
+  #hint{position:fixed;bottom:14px;left:20px;font-size:12.5px;color:#b3a48e;z-index:10}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="stage"><div id="deck">
+
+<!-- ============ 1. TITOLO ============ -->
+<section class="slide" style="padding:44px 70px">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex:0 0 auto">
+    <img src="img/logo_unimi.png" alt="Università degli Studi di Milano" style="height:104px">
+    <div style="text-align:center">
+      <div class="kicker" style="font-size:15px">Università degli Studi di Milano</div>
+      <div class="small" style="letter-spacing:.06em">Facoltà di Scienze e Tecnologie · Corso di Laurea Magistrale in Informatica</div>
+    </div>
+    <img src="img/pong_logo.png" alt="PONG — Playlab fOr inNovation in Games" style="height:74px">
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:18px">
+    <h1>S.E.R.E.N.A.</h1>
+    <div style="font-family:Georgia,serif;font-size:27px;color:var(--ink);font-weight:600">Speech Emotion Recognition as an Embodied Natural Listener</div>
+    <div style="width:220px;height:3px;background:linear-gradient(90deg,var(--gold-bright),var(--red),var(--gold-bright));border-radius:2px"></div>
+    <p style="font-size:17.5px;max-width:760px">Un giudice percettivo, in tempo reale, della resa emotiva del parlato,<br>integrato nel loop conversazionale di un Virtual Human</p>
+  </div>
+  <div style="flex:0 0 auto;display:flex;justify-content:center;gap:64px;text-align:center">
+    <div><div class="small" style="text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:700">Candidato</div><p style="font-size:16.5px"><strong>Francesco Rossi</strong><br></p></div>
+    <div><div class="small" style="text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:700">Relatrice</div><p style="font-size:16.5px"><strong>Prof.ssa Laura Anna Ripamonti</strong></p></div>
+    <div><div class="small" style="text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:700">Correlatrice</div><p style="font-size:16.5px"><strong>Dott.ssa Susanna Brambilla</strong></p></div>
+    <div><div class="small" style="text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:700">A.A.</div><p style="font-size:16.5px"><strong>2025–2026</strong></p></div>
+  </div>
+</section>
+
+<!-- ============ 2. CONTESTO ============ -->
+<section class="slide">
+  <div class="cols ctx-cols" style="gap:30px">
+
+    <!-- colonna sinistra: cornice + contesto + stepper -->
+    <div class="col ctx-left">
+      <div class="kicker">La cornice del lavoro</div>
+      <h2 style="font-size:38px;margin-bottom:0">CONTESTO</h2>
+      <div class="stepper" style="justify-content: space-evenly;" data-stepper>
+        <div class="step" data-step="2"><span class="step-dot"></span><h3>Radici nel laboratorio PONG</h3></div>
+        <div class="step" data-step="3"><span class="step-dot"></span><h3>Il Modello Emotivo</h3></div>
+        <div class="step" data-step="4"><span class="step-dot"></span><h3>Canali emotivi</h3></div>
+      </div>
+    </div>
+
+    <!-- stage (destra, piena altezza) -->
+    <div class="col ctx-right">
+      <div class="stage grow" data-stage>
+
+        <!-- panel 2 -->
+        <div class="stage-panel current" style="padding: 50px;" data-panel="2">
+          <div class="pill warm">Da dove viene S.E.R.E.N.A.</div>
+          <div class="cols" style="flex:1;gap:18px;min-height:0;align-items:stretch">
+            <img src="img/metahuman_base.png" class="radici-img" alt="MetaHuman base dell'agente virtuale">
+            <div class="col" style="flex:1;gap:12px;min-height:0">
+              <div class="card" style="border-left:5px solid var(--gold-bright);flex:0 0 auto"><p style="font-size:16px">Agente nato nel <strong>laboratorio PONG</strong>, raffinato da tesisti precedenti.</p></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;min-height:0">
+                <div class="tile"><div class="ico"><svg viewBox="0 0 24 24"><path d="M20.5 11H19V7a2 2 0 0 0-2-2h-4V3.5a2.5 2.5 0 0 0-5 0V5H4a2 2 0 0 0-2 2v3.8h1.5a2.2 2.2 0 0 1 0 4.4H2V19a2 2 0 0 0 2 2h3.8v-1.5a2.2 2.2 0 0 1 4.4 0V21H17a2 2 0 0 0 2-2v-4h1.5a2.5 2.5 0 0 0 0-5Z"/></svg></div><h3>Personalità</h3></div>
+                <div class="tile"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 21.35 10.55 20C5.4 15.36 2 12.27 2 8.5A4.5 4.5 0 0 1 6.5 4 4.9 4.9 0 0 1 12 6.09 4.9 4.9 0 0 1 17.5 4 4.5 4.5 0 0 1 22 8.5c0 3.77-3.4 6.86-8.55 11.53Z"/></svg></div><h3>Stato emotivo</h3></div>
+                <div class="tile"><div class="ico"><svg viewBox="0 0 24 24"><path d="M9 12c1.93 0 3.5-1.57 3.5-3.5S10.93 5 9 5 5.5 6.57 5.5 8.5 7.07 12 9 12Zm0 2c-2.34 0-7 1.17-7 3.5V19h14v-1.5c0-2.33-4.66-3.5-7-3.5Zm5.76-9.64 1.68-1.69c1.95 1.95 1.95 5.12 0 7.07l-1.68-1.69c.87-.86.87-2.83 0-4.69Zm2.95-2.94 1.66-1.66c3.51 3.51 3.51 9.21 0 12.72l-1.66-1.66c2.59-2.6 2.59-6.81 0-9.4Z"/></svg></div><h3>TTS</h3></div>
+                <div class="tile"><div class="ico"><svg viewBox="0 0 24 24"><path d="M13.5 5.5a2 2 0 1 0-2-2 2 2 0 0 0 2 2ZM12.3 6.2a1.9 1.9 0 0 0-1.5.7L6.9 10 4 8.6 3.1 10.4l3.8 1.9 2.3-2V15l-3 7.5h2.2l2.3-5.7 2 3.2V23h2v-4l-2-3.3.6-3.2A7.3 7.3 0 0 0 19 15v-2a5.2 5.2 0 0 1-4.4-2.5l-1-1.6a1.9 1.9 0 0 0-1.3-1.7Z"/></svg></div><h3>Animazioni</h3></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- panel 3 -->
+        <div class="stage-panel frag" style="padding: 50px;" data-panel="3">
+          <div class="scatter">
+            <span class="sc-tag sc-tag-cat">Categoriale</span>
+            <img class="sc sc-ekman" src="img/big6_emotions.png" alt="Le sei emozioni di base di Ekman">
+            <img class="sc sc-big5" src="img/big_five_nobg.png" alt="I cinque tratti di personalità Big Five">
+            <span class="sc-tag sc-tag-cont">Continuo</span>
+            <img class="sc sc-plut" src="img/plutchik_pad_nobg.png" alt="Modelli dimensionali VA e PAD delle emozioni">
+          </div>
+        </div>
+
+        <!-- panel 4 -->
+        <div class="stage-panel frag"  style="padding: 50px;" data-panel="4">
+         <span class="frag voce-trigger"></span>
+          <div class="channel-grid">
+            <div class="crow">
+              <div class="tile chan"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2a2.4 2.4 0 1 0 2.4 2.4A2.4 2.4 0 0 0 12 2Zm2 5.5h-4A2 2 0 0 0 8 9.5V15h2v7h4v-7h2V9.5a2 2 0 0 0-2-2Z"/></svg></div><h3>Posa</h3><p>postura e prossemica</p></div>
+              <div class="tile chan"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm-3.5 7A1.5 1.5 0 1 1 7 10.5 1.5 1.5 0 0 1 8.5 9Zm7 0A1.5 1.5 0 1 1 14 10.5 1.5 1.5 0 0 1 15.5 9ZM12 17.5A5.5 5.5 0 0 1 6.8 14h10.4a5.5 5.5 0 0 1-5.2 3.5Z"/></svg></div><h3>Volto</h3><p>espressività facciale</p></div>
+              <div class="tile chan"><div class="ico"><svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2ZM7 9h10v2H7Zm0 4h7v2H7Z"/></svg></div><h3>Testo</h3><p>contenuto verbale</p></div>
+            </div>
+            <div class="crow">
+              <div class="tile chan"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 12.5h3.5l1.5-3.5 2.5 7 2-9 2 5.5 1.3-2.5H21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Dati biometrici</h3><p>battito, sudorazione</p></div>
+              <div class="tile chan voce-tile"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 15a4 4 0 0 0 4-4V6a4 4 0 0 0-8 0v5a4 4 0 0 0 4 4Z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 0 8 8.94V22h2v-2.06A9 9 0 0 0 21 11h-2Z"/></svg></div><h3>Voce</h3><p>prosodia, ritmo e pitch</p></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. OBIETTIVO E DOMANDE DI RICERCA ============ -->
+<section class="slide">
+  <div class="kicker">Cosa vogliamo dimostrare</div>
+  <h2 style="font-size:34px">OBIETTIVO E DOMANDE DI RICERCA</h2>
+  <div class="card" style="border-left:5px solid var(--red);margin-bottom:14px">
+    <p style="font-size:1.5rem"> Dimostrare che un modello SER <strong>allineato alla percezione umana</strong> può fungere da <strong class="accent">giudice autoritativo</strong> della resa emotiva di un utente, all'interno di un loop conversazionale generativo con un Virtual Human.</p>
+  </div>
+  <div class="cols">
+    <div class="col">
+      <div class="pill"> Asse Percettivo</div>
+      <div class="card icard frag grow"><h3><span class="accent">RQ1</span> · Costruzione e Calibrazione</h3><p style="font-size:1.5rem">Il classificatore soft multi-label <strong>approssima la percezione</strong> di una giuria umana?</p></div>
+      <div class="card icard frag grow"><h3><span class="accent">RQ2</span> · Selezione del Modello</h3><p style="font-size:1.5rem">Quale configurazione massimizza l'accuratezza sugli audio <strong>unanimi</strong>?</p></div>
+      <div class="card icard frag grow"><h3><span class="accent">RQ3</span> · Efficacia del loop</h3><p style="font-size:1.5rem">Il ciclo di <strong>valutazione e ripetizione</strong> migliora la resa emotiva in modo misurabile?</p></div>
+    </div>
+    <div class="col">
+      <div class="pill warm"> Asse Esperienziale </div>
+      <div class="card icard frag grow"><h3><span class="goldtx">RQ4</span> · Sicurezza psicologica</h3><p style="font-size:1.5rem">Il giudice virtuale <strong>inibisce o libera</strong> l'espressione dell'emozione richiesta?</p></div>
+      <div class="card icard frag grow"><h3><span class="goldtx">RQ5</span> · Legittimità del verdetto</h3><p style="font-size:1.5rem">A parità di esito, il verdetto del VH è <strong>equo e accettabile</strong> quanto quello umano?</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. COSTRUZIONE SER: BASE ============ -->
+<section class="slide">
+  <div class="kicker">Costruzione del SER</div>
+  <h2>Pipeline Sperimentale del LLM</h2>
+  <div class="cols">
+    <div class="col">
+      <div class="imgbox grow">
+        <div class="panel-title"><div class="num">w2v2-L-robust-12</div><div class="lbl">fine-tuned MSP-Podcast</div></div>
+        <img src="img/wav2vec_schema.png" alt="Architettura wav2vec 2.0" style="flex:1 1 0;min-height:0;max-width:100%;object-fit:contain">
+      </div>
+      <div class="cols" style="flex:0 0 auto;gap:10px">
+        <div class="stat frag" style="flex:1"><div class="num" style="font-size:17px">PAD</div><div class="lbl">modello continuo</div></div>
+        <div class="stat frag" style="flex:1"><div class="num" style="font-size:17px">ONNX</div><div class="lbl">inferenza in tempo reale</div></div>
+        <div class="stat frag" style="flex:1"><div class="num" style="font-size:17px">2048</div><div class="lbl">feature · pooling mean+std</div></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="imgbox grow">
+        <div class="panel-title"><div class="num">Corpus Emozionalmente</div></div>
+        <div class="chart-wrap"><canvas id="corpusChart"></canvas></div>
+      </div>
+      <div class="cols" style="flex:0 0 auto;gap:10px">
+        <div class="stat frag" style="flex:1"><div class="num">6 902</div><div class="lbl">audio recitati</div></div>
+        <div class="stat frag" style="flex:1"><div class="num">7</div><div class="lbl"> emozioni </div></div>
+        <div class="stat frag" style="flex:1"><div class="num">≈ 66%</div><div class="lbl">soglia umana vs intended</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. IL CLASSIFICATORE SVM ============ -->
+<section class="slide">
+  <div class="kicker">Costruzione del SER</div>
+  <h2 style="margin-bottom:8px">Il classificatore</h2>
+  <div class="cols">
+    <div class="col">
+      <div class="subhead">SVM con kernel RBF</div>
+      <div class="imgbox" style="flex:0 0 auto">
+        <img src="img/svm_rbf.png" alt="Kernel trick: dati non separabili linearmente proiettati in uno spazio dove un piano li separa" style="flex:0 0 auto;width:100%;max-width:400px;height:auto">
+        <div class="cap">Il <b>kernel trick</b>: i dati vengono proiettati in uno spazio a dimensione superiore, dove la superficie di decisione diventa un semplice piano</div>
+      </div>
+      <ul class="clean grow" style="display:flex;flex-direction:column;justify-content:space-evenly;margin-top:2px; font-size:1.5rem">
+        <li style="font-size:1.5rem"><strong>SVC</strong> (scikit-learn) — calssificazione <strong>Soft Label</strong> </li>
+        <li style="font-size:1.5rem"><strong>Kernel RBF</strong> — confine <strong>non lineare</strong></li>
+        <li style="font-size:1.5rem"><strong>One-vs-Rest</strong> — 7 classificatori binari indipendenti</li>
+        <li style="font-size:1.5rem"><strong>Calibrazione sigmoide</strong> (Platt scaling, CalibratedClassifierCV)</li>
+        <li style="font-size:1.5rem"><strong>GroupKFold sul parlante</strong> + nested CV </li>
+      </ul>
+    </div>
+    <div class="col" style="flex:1.3;gap:11px">
+      <div class="frag" style="display:flex;flex-direction:column;gap:11px;flex:0 0 auto">
+        <div class="subhead">Iperparametri</div>
+        <div class="formula" style="font-size:1.5rem;padding:10px 14px;flex:0 0 auto">w<sub>c</sub> = <span class="accent"><b>α</b></span> · 1[intended = c] + (1 − <span class="accent"><b>α</b></span>) · (voti<sub>c</sub>/5) · (voti<sub>c</sub>/voti<sub>max</sub>)</div>
+        <div style="display:flex;gap:9px;flex:0 0 auto">
+          <div class="hp"><div class="hp-sym">α</div><div class="hp-nm">Fiducia</div><div class="hp-gr"></div></div>
+          <div class="hp"><div class="hp-sym">C</div><div class="hp-nm">rigore SVM</div><div class="hp-gr"></div></div>
+          <div class="hp"><div class="hp-sym">τ<sub>c</sub></div><div class="hp-nm">soglie</div><div class="hp-gr"></div></div>
+          <div class="hp"><div class="hp-sym">k-fold</div><div class="hp-nm">nested CV</div><div class="hp-gr"></div></div>
+        </div>
+      </div>
+      <div class="frag reveal-rules col" style="gap:8px;flex:1;justify-content:space-evenly">
+        <div class="rule"><div class="nm">Dominanza relativa</div><div class="fx">intended ∨ (voti<sub>c</sub> ≥ 2 ∧ voti<sub>c</sub> ≥ top − 1)</div></div>
+        <div class="rule win"><div class="nm">Rapporto di dominanza ✓</div><div class="fx">intended ∨ (voti<sub>c</sub> ≥ 2 ∧ voti<sub>c</sub> ≥ top)</div></div>
+        <div class="rule"><div class="nm">Unanimità (5/5)</div><div class="fx">intended ∧ voti<sub>c</sub> = 5</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. SCELTA E VALUTAZIONE DEL MODELLO ============ -->
+<section class="slide analysis-slide model-slide" data-analysis-slide>
+  <div class="kicker">Costruzione del SER</div>
+  <h2>Scelta e valutazione del modello</h2>
+  <div class="analysis-tabs">
+    <div class="analysis-card active" data-eval-card="0"><div class="tag">Selezione</div><div class="hint">test e indici</div></div>
+    <div class="analysis-card" data-eval-card="1"><div class="tag">Matrici</div><div class="hint">intended/perceived</div></div>
+    <div class="analysis-card" data-eval-card="2"><div class="tag">Consenso</div><div class="hint">strati umani</div></div>
+    <div class="analysis-card" data-eval-card="3"><div class="tag">Similarità</div><div class="hint">similarità</div></div>
+  </div>
+  <span class="frag eval-trigger" data-eval-index="1"></span>
+  <span class="frag eval-trigger" data-eval-index="2"></span>
+  <span class="frag eval-trigger" data-eval-index="3"></span>
+
+  <div class="analysis-body">
+    <div class="eval-panel model-table-panel current" data-eval-panel="0">
+      <div class="model-table-wrap">
+        <table class="compact model-table">
+          <tr><th style="font-size: 1.5rem;">Test</th><th style="font-size: 1.5rem;">Regola positivi</th><th style="font-size: 1.5rem;">α</th><th style="font-size: 1.5rem;">C</th><th style="font-size: 1.5rem;">fold</th><th style="font-size: 1.5rem;">Acc. perc.</th><th style="font-size: 1.5rem;">Cos</th><th style="font-size: 1.5rem;">Cons 5/5</th></tr>
+          <tr><td style="font-size: 1.5rem;">Test1</td><td style="font-size: 1.5rem;">Dominanza relativa</td><td style="font-size: 1.5rem;">0,3</td><td style="font-size: 1.5rem;">1</td><td style="font-size: 1.5rem;">5×3</td><td style="font-size: 1.5rem;">73,3%</td><td style="font-size: 1.5rem;">0,813</td><td style="font-size: 1.5rem;">89,5%</td></tr>
+          <tr><td style="font-size: 1.5rem;">Test2</td><td style="font-size: 1.5rem;">Dominanza relativa</td><td style="font-size: 1.5rem;">0,5</td><td style="font-size: 1.5rem;">1</td><td style="font-size: 1.5rem;">5×3</td><td style="font-size: 1.5rem;">73,2%</td><td style="font-size: 1.5rem;">0,811</td><td style="font-size: 1.5rem;">89,2%</td></tr>
+          <tr class="dim"><td style="font-size: 1.5rem;">Test3</td><td style="font-size: 1.5rem;">Unanimità (5/5)</td><td style="font-size: 1.5rem;">0,2</td><td style="font-size: 1.5rem;">10</td><td style="font-size: 1.5rem;">10×5</td><td style="font-size: 1.5rem;">67,8%</td><td style="font-size: 1.5rem;">0,762</td><td style="font-size: 1.5rem;">85,6%</td></tr>
+          <tr class="dim"><td style="font-size: 1.5rem;">Test4</td><td style="font-size: 1.5rem;">Unanimità (5/5)</td><td style="font-size: 1.5rem;">0,3</td><td style="font-size: 1.5rem;">1</td><td style="font-size: 1.5rem;">5×3</td><td style="font-size: 1.5rem;">67,4%</td><td style="font-size: 1.5rem;">0,762</td><td style="font-size: 1.5rem;">84,5%</td></tr>
+          <tr><td style="font-size: 1.5rem;">Test5</td><td style="font-size: 1.5rem;">Rapporto di dominanza</td><td style="font-size: 1.5rem;">0,3</td><td style="font-size: 1.5rem;">1</td><td style="font-size: 1.5rem;">5×3</td><td style="font-size: 1.5rem;">73,2%</td><td style="font-size: 1.5rem;">0,811</td><td style="font-size: 1.5rem;">89,3%</td></tr>
+          <tr><td style="font-size: 1.5rem;">Test6</td><td style="font-size: 1.5rem;">Rapporto di dominanza</td><td style="font-size: 1.5rem;">0,3</td><td style="font-size: 1.5rem;">1</td><td style="font-size: 1.5rem;">10×5</td><td style="font-size: 1.5rem;">73,8%</td><td style="font-size: 1.5rem;">0,815</td><td style="font-size: 1.5rem;">90,3%</td></tr>
+          <tr class="hl"><td style="font-size: 1.5rem;">Test7 ✓</td><td style="font-size: 1.5rem;">Rapporto di dominanza</td><td style="font-size: 1.5rem;">0,2</td><td style="font-size: 1.5rem;">10</td><td style="font-size: 1.5rem;">10×5</td><td style="font-size: 1.5rem;">75,6%</td><td style="font-size: 1.5rem;">0,824</td><td style="font-size: 1.5rem;">91,6%</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="eval-panel info-column" data-eval-panel="1">
+      <div class="analysis-media focus-media">
+        <img src="img/cm_side_hd_crop.png" alt="Matrici di confusione: vs intended e vs perceived">
+      </div>
+      <div class="insight-panel model-insight">
+        <div>
+          <div class="panel-kicker">Matrici di confusione</div>
+        </div>
+        <div class="mini-compare">
+          <div class="metric"><strong>75,6%</strong><span>perceived</span></div>
+          <div class="metric"><strong>71,7%</strong><span>intended</span></div>
+          <div class="metric"><strong>0,749</strong><span>Macro-F1</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="eval-panel info-column" data-eval-panel="2">
+      <div class="analysis-media focus-media">
+        <img src="img/consenso_corpus_hd_crop.png" alt="Accuracy e cosine per strato di consenso sul corpus">
+      </div>
+      <div class="insight-panel model-insight">
+        <div>
+          <div class="panel-kicker">Strati di consenso</div>
+        </div>
+        <div class="mini-compare">
+          <div class="metric"><strong>91,6%</strong><span>consenso 5/5</span></div>
+          <div class="metric"><strong>0,824</strong><span>cosine media</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="eval-panel info-column" data-eval-panel="3">
+      <div class="analysis-media focus-media">
+        <img src="img/cosine_corpus_crop.png" alt="Distribuzione della cosine similarity per audio">
+      </div>
+      <div class="insight-panel model-insight">
+        <div>
+          <div class="panel-kicker" style="font-size: 1rem !important;">Similarità distribuzionale</div>
+        </div>
+        <div class="mini-compare">
+          <div class="metric"><strong>0,903</strong><span>mediana</span></div>
+          <div class="metric"><strong>0,824</strong><span>media</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. SERENA: INTEGRAZIONE ============ -->
+<section class="slide">
+  <div class="kicker">La demo</div>
+  <h2>S.E.R.E.N.A. — il protocollo del provino</h2>
+  <div class="serena-layout">
+    <div class="serena-visuals" style="justify-content: center;">
+      <div>
+        <div class="cap">Marta, coordinatrice di casting</div>
+        <img class="marta-view" src="img/marta_saluto.png" alt="Marta, coordinatrice di casting">
+      </div>
+      <div class="ingredient-list">
+        <div class="ingredient"><div class="dash"></div><h3>Unreal Engine 5.4</h3></div>
+        <div class="ingredient"><div class="dash"></div><h3>Gemini 2.0 Flash-Lite</h3></div>
+        <div class="ingredient"><div class="dash"></div><h3>Oculus Quest 2</h3></div>
+      </div>
+      
+      
+    </div>
+    <div class="serena-right">
+      <div class="pill warm" style="align-self:center">Disegno within-subject</div>
+      <div class="timeline macro-flow">
+        <div class="tstep frag" data-seq="1">
+          <div class="dot"><svg viewBox="0 0 24 24"><path d="M9 12c1.93 0 3.5-1.57 3.5-3.5S10.93 5 9 5 5.5 6.57 5.5 8.5 7.07 12 9 12Zm0 2c-2.34 0-7 1.17-7 3.5V19h14v-1.5c0-2.33-4.66-3.5-7-3.5Zm5.76-9.64 1.68-1.69c1.95 1.95 1.95 5.12 0 7.07l-1.68-1.69c.87-.86.87-2.83 0-4.69Zm2.95-2.94 1.66-1.66c3.51 3.51 3.51 9.21 0 12.72l-1.66-1.66c2.59-2.6 2.59-6.81 0-9.4Z"/></svg></div>
+          <div class="word">Provino</div><div class="sub">Umano ⇄ VH</div>
+        </div>
+        <div class="tstep frag" data-seq="3">
+          <div class="dot"><svg viewBox="0 0 24 24"><path d="M9 2a1 1 0 0 0-1 1v1H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V3a1 1 0 0 0-1-1H9Zm0 3h6V4H9v1ZM7 11h10v2H7v-2Zm0 4h10v2H7v-2Zm0 4h6v2H7v-2Z"/></svg></div>
+          <div class="word">Questionario</div>
+        </div>
+        <div class="tstep frag" data-seq="4">
+          <div class="dot"><svg viewBox="0 0 24 24"><path d="M9 12c1.93 0 3.5-1.57 3.5-3.5S10.93 5 9 5 5.5 6.57 5.5 8.5 7.07 12 9 12Zm0 2c-2.34 0-7 1.17-7 3.5V19h14v-1.5c0-2.33-4.66-3.5-7-3.5Zm5.76-9.64 1.68-1.69c1.95 1.95 1.95 5.12 0 7.07l-1.68-1.69c.87-.86.87-2.83 0-4.69Zm2.95-2.94 1.66-1.66c3.51 3.51 3.51 9.21 0 12.72l-1.66-1.66c2.59-2.6 2.59-6.81 0-9.4Z"/></svg></div>
+          <div class="word">Provino</div><div class="sub">VH ⇄ Umano</div>
+        </div>
+        <div class="tstep frag" data-seq="5">
+          <div class="dot"><svg viewBox="0 0 24 24"><path d="M9 2a1 1 0 0 0-1 1v1H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V3a1 1 0 0 0-1-1H9Zm0 3h6V4H9v1ZM7 11h10v2H7v-2Zm0 4h10v2H7v-2Zm0 4h6v2H7v-2Z"/></svg></div>
+          <div class="word">Questionario</div>
+        </div>
+        <div class="tstep frag" data-seq="6">
+          <div class="dot"><svg viewBox="0 0 24 24"><path d="M2 10h3v4H2v-4Zm5-4h3v12H7V6Zm5-3h3v18h-3V3Zm5 5h3v8h-3V8Z"/></svg></div>
+          <div class="word">Valutazione</div><div class="sub">audio</div>
+        </div>
+      </div>
+      <div class="micro-panel frag" data-seq="2">
+        <div class="provino-link"><svg viewBox="0 0 26 46"><circle cx="13" cy="3" r="3"/><path d="M13 3V34" stroke="currentColor" stroke-width="2.6" fill="none"/><path d="M13 46 6.5 34.5h13Z"/></svg></div>
+        <div class="timeline serena-loop">
+          <div class="tstep"><div class="dot"><svg viewBox="0 0 24 24"><path d="M3 11 21 3l-8 18-2-7-8-3Z"/></svg></div>
+            <div class="word">Consegna</div></div>
+          <div class="tstep"><div class="dot"><svg viewBox="0 0 24 24"><path d="M12 15a4 4 0 0 0 4-4V6a4 4 0 0 0-8 0v5a4 4 0 0 0 4 4Z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 0 8 8.94V22h2v-2.06A9 9 0 0 0 21 11h-2Z"/></svg></div>
+            <div class="word">Recita</div></div>
+          <div class="tstep"><div class="dot"><svg viewBox="0 0 24 24"><path d="M9 2v2H7a2 2 0 0 0-2 2v2H3v2h2v2H3v2h2v2H3v2h2v2a2 2 0 0 0 2 2h2v2h2v-2h2v2h2v-2h2a2 2 0 0 0 2-2v-2h2v-2h-2v-2h2v-2h-2V8h2V6h-2V4a2 2 0 0 0-2-2h-2V0h-2v2h-2V0H9v2ZM7 6h10v12H7V6Z"/></svg></div>
+            <div class="word">SER</div></div>
+          <div class="tstep"><div class="dot"><svg viewBox="0 0 24 24"><rect x="3" y="19.5" width="13" height="2.6" rx="1.2"/><g transform="rotate(45 11 8)"><rect x="8" y="2.5" width="6.5" height="7" rx="1.3"/><rect x="10.4" y="8.5" width="2.2" height="10" rx="1.1"/></g></svg></div>
+            <div class="word">Verdetto</div></div>
+          <div class="tstep"><div class="dot"><svg viewBox="0 0 24 24"><path d="M17.65 6.35A8 8 0 1 0 20 12h-2a6 6 0 1 1-1.76-4.24L14 10h6V4l-2.35 2.35Z"/></svg></div>
+            <div class="word">Ripeti</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. ANALISI VALUTAZIONI ============ -->
+<section class="slide analysis-slide" data-analysis-slide>
+  <div class="kicker">Risultati — valutazioni</div>
+  <h2>Analisi Valutazioni</h2>
+  <div class="analysis-tabs">
+    <div class="analysis-card active" data-eval-card="0"><div class="tag">Consenso</div><div class="hint">ambiguità dei rater</div></div>
+    <div class="analysis-card" data-eval-card="1"><div class="tag">Similarità</div><div class="hint">vicinanza al perceived</div></div>
+    <div class="analysis-card" data-eval-card="2"><div class="tag">Single vs Multi Label</div><div class="hint">argmax e set</div></div>
+    <div class="analysis-card" data-eval-card="3"><div class="tag">Miglioramento</div><div class="hint">tentativi successivi</div></div>
+  </div>
+  <span class="frag eval-trigger" data-eval-index="1"></span>
+  <span class="frag eval-trigger" data-eval-index="2"></span>
+  <span class="frag eval-trigger" data-eval-index="2" data-zoom="1"></span>
+  <span class="frag eval-trigger" data-eval-index="3"></span>
+
+  <div class="analysis-body">
+    <div class="eval-panel two-col info-column current" data-eval-panel="0">
+      <div class="analysis-chart-frame">
+        <div class="chart-wrap"><canvas id="demoConsensusChart"></canvas></div>
+      </div>
+      <div class="insight-panel" style="justify-content: center; border: none; background-color: transparent;">
+        <div>
+          <div class="panel-kicker">Consenso umano</div>
+          <div class="panel-title-small">Ambiguità maggiore del materiale</div>
+        </div>
+        <div class="metric-strip">
+          <div class="metric"><strong>956</strong><span>audio della demo</span></div>
+          <div class="metric"><strong>0,48→0,37</strong><span>Krippendorff α</span></div>
+          <div class="metric"><strong>168</strong><span>audio 5/5</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="eval-panel wide-top similarity-row" data-eval-panel="1">
+      <div class="image-pair">
+        <div class="analysis-media focus-media">
+          <img src="img/consenso_demo_crop.png" alt="Accuracy e cosine similarity per strato di consenso, demo">
+          <div class="cap">Più i rater concordano, più l'argmax del classificatore resta allineato.</div>
+        </div>
+        <div class="analysis-media focus-media">
+          <img src="img/similarity_crop.png" alt="Distribuzione della cosine similarity tra score e distribuzione voti">
+          <div class="cap">La distribuzione della cosine similarity resta concentrata nella parte alta.</div>
+        </div>
+      </div>
+      <div class="insight-panel">
+        <div class="mini-compare">
+          <div class="metric"><strong>57,2%</strong><span>acc. vs perceived</span></div>
+          <div class="metric"><strong>48,4%</strong><span>acc. vs intended</span></div>
+          <div class="metric"><strong>0,69</strong><span>cosine media</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="eval-panel single-multi-panel" data-eval-panel="2">
+      <div class="insight-panel">
+        <div>
+          <div class="panel-kicker" style="text-align: center;">Single vs Multi</div>
+          <div class="panel-title-small" style="text-align: center;">Argmax su </br> Majority ≥ 3 </div>
+        </div>
+        <div class="metric-strip">
+          <div class="metric"><strong>75,6%</strong><span>corpus perceived</span></div>
+          <div class="metric"><strong>57,2%</strong><span>demo perceived single</span></div>
+          <div class="metric"><strong>58,4%</strong><span>demo perceived multi</span></div>
+        </div>
+      </div>
+      <div class="image-pair">
+        <div class="analysis-media focus-media">
+          <img src="img/CM_max_3_5.png" alt="Matrice di confusione single-label">
+          <div class="cap">Single-label: una previsione per audio, accuratezza 57,2%.</div>
+        </div>
+        <div class="analysis-media">
+          <img src="img/cm_multilabel.png" alt="Matrice di confusione multi-label">
+          <div class="cap">Multi-label: set sopra soglia, accuratezza 58,4%.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="eval-panel wide-top" data-eval-panel="3">
+      <div class="analysis-media">
+        <img src="img/curve_media.png" alt="Curve di miglioramento medie per rater e classificatore">
+        <div class="cap">Rater umani e classificatore mostrano la stessa direzione di crescita (Due scale differenti).</div>
+      </div>
+      <div class="insight-panel" style="display:grid;grid-template-columns:.72fr 1.28fr;align-items:center">
+        <div>
+          <div class="panel-kicker">Miglioramento</div>
+          <div class="panel-title-small">Il loop di tentativi aumenta la resa emotiva percepita</div>
+        </div>
+        <div class="mini-compare">
+          <div class="metric"><strong>24%→40%</strong><span>rater umani</span></div>
+          <div class="metric"><strong>+16</strong><span>punti medi</span></div>
+          <div class="metric"><strong>135+123</strong><span>osservazioni appaiate</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9. QUESTIONARI 1 ============ -->
+<section class="slide survey-slide">
+  <div class="kicker">Risultati — questionari (1/2)</div>
+  <h2>RQ4 · Tensione, Sicurezza Psicologica e Presenza Sociale</h2>
+  <div class="survey-grid nine">
+    <div class="survey-violin-row">
+      <div class="imgbox compact">
+        <img src="img/manipolazione_tensione.png" alt="Manipulation check e tensione">
+      </div>
+      <div class="imgbox compact index-plot">
+        <img src="img/fig_violin_psi.png" alt="PSI - Sicurezza psicologica">
+      </div>
+      <div class="imgbox compact index-plot">
+        <img src="img/fig_violin_spi.png" alt="SPI - Presenza sociale">
+      </div>
+    </div>
+
+    <div class="survey-choice-row">
+      <div class="choice-panel nine-choice">
+        <div class="choice-title">Scelta forzata: agio e realtà dell'interazione</div>
+        <div class="chart-wrap"><canvas id="choiceComfortChart"></canvas></div>
+        <div class="choice-foot">
+          <span>Numero di partecipanti (N=27)</span>
+          <div class="choice-foot-legend" aria-label="Legenda scelta forzata">
+            <span class="choice-key" style="--key-color:#2b66ad">Umano</span>
+            <span class="choice-key" style="--key-color:#b8b8b8">Entrambi uguale</span>
+            <span class="choice-key" style="--key-color:#e66a38">VH</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="survey-side-stats">
+        <div class="stat"><div class="num">3,92 ↔ 4,02</div><div class="lbl">PSI Umano vs VH (n.s.)</div></div>
+        <div class="stat"><div class="num">3,33 ↔ 3,04</div><div class="lbl">tensione 0–10 (n.s.)</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10. QUESTIONARI 2 ============ -->
+<section class="slide survey-slide">
+  <div class="kicker">Risultati — questionari (2/2)</div>
+  <h2>RQ5 · Fiducia nel Verdetto</h2>
+  <div class="survey-grid ten">
+    <div class="imgbox compact vti-panel">
+      <img src="img/fig_violin_vti.png" alt="VTI - Fiducia nel verdetto">
+      <div class="cap">VTI: fiducia nel verdetto artistico · differenza significativa ma punteggio VH sopra il neutro</div>
+    </div>
+
+    <div class="choice-panel centered-chart">
+      <div class="choice-title">Scelta forzata: verdetto e preferenza per un provino vero</div>
+      <div class="chart-wrap"><canvas id="choiceVerdictChart"></canvas></div>
+    </div>
+
+    <div class="ten-summary">
+      <div class="stat"><div class="num" style="font-size:22px">3,93 vs 3,37</div><div class="lbl">VTI Umano vs VH (p = 0,007)</div></div>
+      <div class="stat"><div class="num" style="font-size:22px">16 + 11</div><div class="lbl">fiducia: umano o entrambi uguale</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11. CONCLUSIONI E SVILUPPI ============ -->
+<section class="slide">
+  <div class="kicker">Conclusioni</div>
+  <h2>Risposte alle RQ e Sviluppi Futuri</h2>
+  <div class="closing-layout">
+    <div class="rq-column" style="justify-content: space-around;">
+      <div class="rq-answer"><h3><span class="accent">RQ1 ✓</span> Approssima la giuria</h3><p>75,6% vs perceived, cosine 0,82; sul campo scende di 17,3 punti confrontata al 48% della giuria umana.</p></div>
+      <div class="rq-answer"><h3><span class="accent">RQ2 ✓</span> Rapporto di Dominanza</h3><p>Con α = 0,2 e C = 10: consenso 5/5 al 91,6%. La regola pesa più del tuning.</p></div>
+      <div class="rq-answer"><h3><span class="accent">RQ3 ✓</span> Il loop migliora</h3><p>Rater e classificatore crescono nella stessa direzione: </br> 24% → 40% nel gruppo a 3 tentativi.</p></div>
+      <div class="rq-answer"><h3><span class="goldtx">RQ4 ✓</span> Nessuna inibizione</h3><p>Sicurezza psicologica e tensione lievemente milgiori nell'interazione con il Vitual Human</p></div>
+      <div class="rq-answer"><h3><span class="goldtx">RQ5 ~</span> Equo, ma con diffidenza</h3><p>Il verdetto è accettabile; il deficit riguarda la presenza sociale, non l'equità del giudizio.</p></div>
+        </div>
+
+    <div class="future-side">
+      <div class="future-block frag" data-seq="6">
+        <div class="pill warm">Applicazioni</div>
+        <div class="future-grid">
+          <div class="future-item"><span class="future-icon app"><svg viewBox="0 0 24 24"><path d="M12 15a4 4 0 0 0 4-4V6a4 4 0 0 0-8 0v5a4 4 0 0 0 4 4Z"/><path d="M19 11a7 7 0 0 1-14 0"/><path d="M12 18v4"/><path d="M8 22h8"/></svg></span><h3>Public speaking</h3></div>
+          <div class="future-item"><span class="future-icon app"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.4 2.8 8.4 7 10 4.2-1.6 7-5.6 7-10V6l-7-3Z"/><path d="M9 12l2 2 4-5"/></svg></span><h3>Esposizione graduale</h3></div>
+          <div class="future-item"><span class="future-icon app"><svg viewBox="0 0 24 24"><path d="M4 19.5V5a2 2 0 0 1 2-2h12"/><path d="M6 17h14V3H6"/><path d="M8 7h8"/><path d="M8 11h6"/></svg></span><h3>Formazione espressiva</h3></div>
+        </div>
+      </div>
+      <div class="future-block frag" data-seq="7" data-group="future-first">
+        <div class="pill">Sviluppi futuri</div>
+        <div class="future-grid">
+          <div class="future-item frag" data-seq="7" data-group="future-first"><span class="future-icon"><svg viewBox="0 0 24 24"><path d="M17.7 6.3A8 8 0 1 0 20 12h-2a6 6 0 1 1-1.8-4.2L14 10h6V4l-2.3 2.3Z"/></svg></span><h3>Arricchire il VH</h3><p>Utilizzo score per influenzare l'emotività.</p></div>
+          <div class="future-item frag" data-seq="8"><span class="future-icon"><svg viewBox="0 0 24 24"><path d="M4 14a8 8 0 0 1 16 0"/><path d="M12 14l4-5"/><path d="M7 14h.01"/><path d="M17 14h.01"/><path d="M12 6v.01"/></svg></span><h3>Misurare intensità</h3><p>Leggere l'intensità espressiva, recuperando arousal.</p></div>
+          <div class="future-item frag" data-seq="9"><span class="future-icon"><svg viewBox="0 0 24 24"><path d="M3 12h3l2-5 4 10 3-7 2 4h4"/><path d="M3 19h18"/></svg></span><h3>Streaming</h3><p>Finestra mobile per seguire la traiettoria emotiva nel tempo.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 12. GRAZIE ============ -->
+<section class="slide" style="align-items:center;justify-content:center;text-align:center;padding:44px 70px">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px">
+    <div style="display:flex;align-items:center;gap:56px">
+      <img src="img/logo_unimi.png" alt="Università degli Studi di Milano" style="height:96px">
+      <img src="img/pong_logo.png" alt="PONG — Playlab fOr inNovation in Games" style="height:68px">
+    </div>
+    <div>
+      <h1 style="font-size:64px">Grazie per l'attenzione</h1>
+      <div style="width:220px;height:3px;background:linear-gradient(90deg,var(--gold-bright),var(--red),var(--gold-bright));border-radius:2px;margin:22px auto 0"></div>
+    </div>
+    <blockquote style="max-width:780px;font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:15.5px;line-height:1.55;color:var(--ink-soft)">
+      «E come possiamo intenderci, signore, se nelle parole ch'io dico metto il senso e il valore delle cose come sono dentro di me; mentre chi le ascolta, inevitabilmente le assume col senso e col valore che hanno per sé, del mondo com'egli l'ha dentro?»
+      <div style="margin-top:10px;font-style:normal;font-weight:700;font-size:14px;color:var(--ink)">— Luigi Pirandello, <em>Sei personaggi in cerca d'autore</em></div>
+    </blockquote>
+  </div>
+</section>
+
+</div></div>
+
+<div id="counter">1 / 12</div>
+<div id="hint">← → per navigare · F schermo intero</div>
+
+<script src="chart.umd.min.js"></script>
+<script>
+(function(){
+  const slides=[...document.querySelectorAll('.slide')];
+  const bar=document.getElementById('bar');
+  const counter=document.getElementById('counter');
+  const deck=document.getElementById('deck');
+  let i=0;
+
+  /* ---- grafico Corpus Emozionalmente (Chart.js) ---- */
+  let corpusChart=null;
+  function buildCorpusChart(){
+    const cv=document.getElementById('corpusChart');
+    if(!cv||typeof Chart==='undefined')return;
+    if(corpusChart){corpusChart.reset();corpusChart.update();return;}
+    const labels=['Rabbia','Disgusto','Paura','Gioia','Neutro','Tristezza','Sorpresa'];
+    const seg=[
+      {l:'5 / 5',c:'#12b18a',d:[26,9,12,23,52,29,30]},
+      {l:'4 / 5',c:'#28c1de',d:[26,17,19,24,26,30,26]},
+      {l:'3 / 5',c:'#f5a41d',d:[20,26,22,21,13,19,20]},
+      {l:'2 / 5',c:'#ec4256',d:[15,24,22,17,6,14,14]},
+      {l:'1 / 5',c:'#a24fd4',d:[12,24,25,15,3,7,10]},
+      {l:'0 / 5',c:'#a49a8b',d:[1,0,0,0,0,1,0]}
+    ];
+    corpusChart=new Chart(cv.getContext('2d'),{
+      type:'bar',
+      data:{labels:labels,datasets:seg.map(s=>({label:s.l,data:s.d,backgroundColor:s.c,borderColor:'#fffdf6',borderWidth:1,borderRadius:2}))},
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        animation:{duration:1100,easing:'easeOutQuart'},
+        scales:{
+          x:{stacked:true,grid:{display:false},ticks:{color:'#63544a',font:{size:20,weight:'600'}}},
+          y:{stacked:true,max:100,grid:{color:'#e6dbc6'},ticks:{color:'#63544a',font:{size:20},callback:v=>v+'%'},title:{display:true,text:'% audio · voti che confermano l’intended',color:'#63544a',font:{size:20}}}
+        },
+        plugins:{
+          legend:{position:'bottom',labels:{color:'#2e2118',font:{size:20,weight:'600'},boxWidth:18,padding:12}},
+          tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+'%'}}
+        }
+      }
+    });
+  }
+
+  /* ---- grafico consenso sul dataset Excel/demo ---- */
+  let demoConsensusChart=null;
+  function buildDemoConsensusChart(){
+    const cv=document.getElementById('demoConsensusChart');
+    if(!cv||typeof Chart==='undefined')return;
+    if(demoConsensusChart){demoConsensusChart.reset();demoConsensusChart.update();return;}
+    const labels=['anger','disgust','fear','joy','neutral','sadness','surprise'];
+    const totals=[124,161,158,137,100,128,148];
+    const seg=[
+      {l:'5 / 5',c:'#12b18a',d:[8,3,8,13,42,7,12]},
+      {l:'4 / 5',c:'#28c1de',d:[16,4,12,15,22,17,18]},
+      {l:'3 / 5',c:'#f5a41d',d:[17,7,11,18,20,23,18]},
+      {l:'2 / 5',c:'#ec4256',d:[16,12,15,11,10,21,14]},
+      {l:'1 / 5',c:'#a24fd4',d:[17,29,18,18,5,16,14]},
+      {l:'0 / 5',c:'#9aa8ba',d:[26,44,35,24,1,16,24]}
+    ];
+    const nLabels={
+      id:'demoConsensusNLabels',
+      afterDatasetsDraw(chart){
+        const {ctx,scales}=chart;
+        ctx.save();
+        ctx.fillStyle='#2e2118';
+        ctx.font='700 20px Segoe UI, sans-serif';
+        ctx.textAlign='center';
+        labels.forEach((_,idx)=>{
+          ctx.fillText('n='+totals[idx],scales.x.getPixelForValue(idx),scales.y.getPixelForValue(104));
+        });
+        ctx.restore();
+      }
+    };
+    demoConsensusChart=new Chart(cv.getContext('2d'),{
+      type:'bar',
+      data:{labels:labels,datasets:seg.map(s=>({label:s.l,data:s.d,backgroundColor:s.c,borderColor:'#1f1913',borderWidth:.8,borderRadius:2}))},
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        animation:{duration:1050,easing:'easeOutQuart'},
+        layout:{padding:{top:18,right:8,left:2,bottom:0}},
+        scales:{
+          x:{stacked:true,grid:{display:false},ticks:{color:'#2e2118',font:{size:20,weight:'600'},maxRotation:28,minRotation:28}},
+          y:{stacked:true,max:108,grid:{color:'#e6dbc6'},ticks:{color:'#63544a',font:{size:20},callback:v=>v<=100?v+'%':''},title:{display:true,text:'percentuale di audio',color:'#63544a',font:{size:20}}}
+        },
+        plugins:{
+          legend:{position:'right',labels:{color:'#2e2118',font:{size:20,weight:'600'},boxWidth:18,padding:10}},
+          title:{display:true,text:'EXCEL (956 audio) — percentuale',color:'#2e2118',font:{size:22,weight:'700'},padding:{bottom:2}},
+          tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+'%'}}
+        }
+      },
+      plugins:[nLabels]
+    });
+  }
+
+  const forcedChoiceValueLabels={
+    id:'forcedChoiceValueLabels',
+    afterDatasetsDraw(chart){
+      const {ctx}=chart;
+      ctx.save();
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      chart.data.datasets.forEach((dataset,datasetIndex)=>{
+        const meta=chart.getDatasetMeta(datasetIndex);
+        meta.data.forEach((bar,index)=>{
+          const value=dataset.data[index];
+          if(!value)return;
+          const props=bar.getProps(['x','y','base'],true);
+          const left=Math.min(props.x,props.base);
+          const right=Math.max(props.x,props.base);
+          const width=right-left;
+          ctx.font='800 20px Segoe UI, sans-serif';
+          ctx.fillStyle=datasetIndex===1?'#2e2118':'#fffdf6';
+          let x=left+width/2;
+          if(width<22){
+            x=right-8;
+            ctx.fillStyle=datasetIndex===1?'#2e2118':'#fffdf6';
+          }
+          ctx.fillText(value,x,props.y);
+        });
+      });
+      ctx.restore();
+    }
+  };
+
+  let choiceComfortChart=null;
+  let choiceVerdictChart=null;
+  function forcedChoiceOptions(settings){
+    settings=settings||{};
+    const externalLegend=!!settings.externalLegend;
+    return {
+      indexAxis:'y',
+      responsive:true,
+      maintainAspectRatio:false,
+      animation:{duration:900,easing:'easeOutQuart'},
+      layout:{padding:{top:4,right:8,left:2,bottom:0}},
+      scales:{
+        x:{stacked:true,max:27,grid:{color:'#e6dbc6'},ticks:{stepSize:5,color:'#63544a',font:{size:20}},title:{display:!externalLegend,text:'Numero di partecipanti (N=27)',color:'#63544a',font:{size:20,weight:'600'}}},
+        y:{stacked:true,grid:{display:false},ticks:{color:'#2e2118',font:{size:20,weight:'650'}}}
+      },
+      plugins:{
+        legend:{display:!externalLegend,position:'bottom',labels:{color:'#2e2118',font:{size:20,weight:'650'},boxWidth:18,padding:12}},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.x}}
+      }
+    };
+  }
+  function makeForcedChoiceChart(canvas,labels,values,settings){
+    settings=settings||{};
+    const datasets=[
+      {label:'Umano',data:values.umano,backgroundColor:'#2b66ad',borderColor:'#fffdf6',borderWidth:1,borderRadius:4,barThickness:settings.barThickness},
+      {label:'Entrambi uguale',data:values.uguale,backgroundColor:'#b8b8b8',borderColor:'#fffdf6',borderWidth:1,borderRadius:4,barThickness:settings.barThickness},
+      {label:'VH',data:values.vh,backgroundColor:'#e66a38',borderColor:'#fffdf6',borderWidth:1,borderRadius:4,barThickness:settings.barThickness}
+    ];
+    return new Chart(canvas.getContext('2d'),{
+      type:'bar',
+      data:{labels,datasets},
+      options:forcedChoiceOptions(settings),
+      plugins:[forcedChoiceValueLabels]
+    });
+  }
+  function buildChoiceComfortChart(){
+    const cv=document.getElementById('choiceComfortChart');
+    if(!cv||typeof Chart==='undefined')return;
+    if(choiceComfortChart){choiceComfortChart.reset();choiceComfortChart.update();return;}
+    choiceComfortChart=makeForcedChoiceChart(cv,
+      ['Libertà espressiva','Più ansia / imbarazzo','Interazione più reale'],
+      {umano:[4,10,22],uguale:[15,10,5],vh:[8,7,0]},
+      {barThickness:24,externalLegend:true}
+    );
+  }
+  function buildChoiceVerdictChart(){
+    const cv=document.getElementById('choiceVerdictChart');
+    if(!cv||typeof Chart==='undefined')return;
+    if(choiceVerdictChart){choiceVerdictChart.reset();choiceVerdictChart.update();return;}
+    choiceVerdictChart=makeForcedChoiceChart(cv,
+      ['Fiducia nel verdetto','Preferito in casi reali'],
+      {umano:[16,21],uguale:[11,5],vh:[0,1]},
+      {barThickness:42}
+    );
+  }
+  function frags(){
+    const arr=[...slides[i].querySelectorAll('.frag')];
+    return arr.map((f,k)=>({f,k,s:f.dataset.seq!==undefined?parseFloat(f.dataset.seq):k}))
+              .sort((a,b)=>a.s-b.s||a.k-b.k).map(o=>o.f);
+  }
+  function syncSteppers(){
+    document.querySelectorAll('[data-stepper]').forEach(stepper=>{
+      const slide=stepper.closest('.slide');
+      const stage=slide.querySelector('[data-stage]');
+      if(!stage)return;
+      const panels=[...stage.querySelectorAll('.stage-panel')];
+      const onPanels=panels.filter(p=>p.classList.contains('on'));
+      const current=onPanels.length?onPanels[onPanels.length-1]:panels[0];
+      panels.forEach(p=>p.classList.toggle('current',p===current));
+      const curStep=parseInt(current.dataset.panel,10);
+      stepper.querySelectorAll('.step').forEach(s=>{
+        const n=parseInt(s.dataset.step,10);
+        s.classList.toggle('active',n===curStep);
+        s.classList.toggle('done',n<curStep);
+      });
+    });
+  }
+  function syncAnalysisTabs(){
+    document.querySelectorAll('[data-analysis-slide]').forEach(slide=>{
+      const on=[...slide.querySelectorAll('.eval-trigger.on')];
+      const last=on[on.length-1];
+      const idx=last?parseInt(last.dataset.evalIndex,10):0;
+      const zoom=!!(last&&last.dataset.zoom);
+      slide.querySelectorAll('[data-eval-card]').forEach(card=>{
+        card.classList.toggle('active',parseInt(card.dataset.evalCard,10)===idx);
+      });
+      slide.querySelectorAll('[data-eval-panel]').forEach(panel=>{
+        const cur=parseInt(panel.dataset.evalPanel,10)===idx;
+        panel.classList.toggle('current',cur);
+        panel.classList.toggle('zoom-second',cur&&zoom);
+      });
+    });
+  }
+  function show(n,revealAll){
+    const t=Math.max(0,Math.min(slides.length-1,n));
+    deck.style.setProperty('--dir',t>=i?1:-1);
+    i=t;
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+    if(revealAll)frags().forEach((f,k)=>{
+      f.style.transitionDelay=(k*45)+'ms';
+      f.classList.add('on');
+      setTimeout(()=>{f.style.transitionDelay='';},700+k*45);
+    });
+    bar.style.width=((i+1)/slides.length*100)+'%';
+    counter.textContent=(i+1)+' / '+slides.length;
+    location.hash=i+1;
+    syncSteppers();
+    syncAnalysisTabs();
+    if(slides[i].querySelector('#corpusChart'))requestAnimationFrame(buildCorpusChart);
+    if(slides[i].querySelector('#demoConsensusChart'))requestAnimationFrame(buildDemoConsensusChart);
+    if(slides[i].querySelector('#choiceComfortChart'))requestAnimationFrame(buildChoiceComfortChart);
+    if(slides[i].querySelector('#choiceVerdictChart'))requestAnimationFrame(buildChoiceVerdictChart);
+  }
+  function next(){
+    const pending=frags().find(x=>!x.classList.contains('on'));
+    if(pending){
+      const group=pending.dataset.group;
+      const toReveal=group?frags().filter(x=>x.dataset.group===group&&!x.classList.contains('on')):[pending];
+      toReveal.forEach(f=>f.classList.add('on'));
+      syncSteppers();syncAnalysisTabs();return;
+    }
+    if(i<slides.length-1)show(i+1);
+  }
+  function prev(){
+    const on=frags().filter(x=>x.classList.contains('on'));
+    if(on.length){
+      const last=on[on.length-1];
+      const group=last.dataset.group;
+      const toHide=group?frags().filter(x=>x.dataset.group===group&&x.classList.contains('on')):[last];
+      toHide.forEach(f=>f.classList.remove('on'));
+      syncSteppers();syncAnalysisTabs();return;
+    }
+    if(i>0)show(i-1,true);
+  }
+  function fit(){
+    const s=Math.min(innerWidth/1280,innerHeight/720);
+    deck.style.transform='scale('+s+')';
+  }
+  addEventListener('resize',fit);
+  addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)){e.preventDefault();next();}
+    else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();prev();}
+    else if(e.key==='Home')show(0);
+    else if(e.key==='End')show(slides.length-1,true);
+    else if(e.key.toLowerCase()==='f'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}
+  });
+  addEventListener('click',e=>{
+    if(e.clientX>innerWidth*0.85)next();
+    else if(e.clientX<innerWidth*0.15)prev();
+  });
+  let tx=null;
+  addEventListener('touchstart',e=>tx=e.touches[0].clientX);
+  addEventListener('touchend',e=>{
+    if(tx===null)return;
+    const dx=e.changedTouches[0].clientX-tx;
+    if(dx<-40)next(); else if(dx>40)prev();
+    tx=null;
+  });
+  const h=parseInt(location.hash.slice(1));
+  fit();
+  show(isNaN(h)?0:h-1);
+})();
+</script>
+</body>
+</html>

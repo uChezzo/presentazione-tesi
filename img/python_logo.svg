@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 128" role="img" aria-label="Python">
+  <defs>
+    <linearGradient id="pyBlue" x1="52" y1="18" x2="126" y2="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3776ab"/>
+      <stop offset="1" stop-color="#244e78"/>
+    </linearGradient>
+    <linearGradient id="pyYellow" x1="98" y1="36" x2="42" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffd43b"/>
+      <stop offset="1" stop-color="#f0a91a"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#pyBlue)" d="M86 9c-30 0-36 11-36 27v14h48c8 0 14 6 14 14v20h17c16 0 29-12 29-28V38c0-17-14-29-32-29H86Zm-18 18a8 8 0 1 1 0 16 8 8 0 0 1 0-16Z"/>
+  <path fill="url(#pyYellow)" d="M122 119c30 0 36-11 36-27V78h-48c-8 0-14-6-14-14V44H79c-16 0-29 12-29 28v18c0 17 14 29 32 29h40Zm18-18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"/>
+  <text x="184" y="80" fill="#2f3340" font-family="Segoe UI, Arial, sans-serif" font-size="46" font-weight="650">Python</text>
+</svg>
