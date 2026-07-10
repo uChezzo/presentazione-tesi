@@ -343,9 +343,9 @@
   .eval-panel.info-column .metric{flex:0 0 auto;padding:12px 8px}
   .eval-panel.info-column .analysis-media.focus-media img{transform:scale(1.08)}
   .eval-panel.info-column .image-pair .analysis-media.focus-media img{transform:scale(1.04)}
-  .eval-panel.similarity-row{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}
-  .eval-panel.similarity-row .insight-panel{padding:10px 12px}
-  .eval-panel.similarity-row .mini-compare{grid-template-columns:repeat(3,1fr)}
+  .eval-panel.similarity-row{grid-template-columns:minmax(0,1fr) 220px;grid-template-rows:minmax(0,1fr)}
+  .eval-panel.similarity-row .insight-panel{padding:12px 10px;display:flex;flex-direction:column;justify-content:space-evenly;height:100%}
+  .eval-panel.similarity-row .mini-compare{grid-template-columns:1fr;grid-auto-flow:row;flex:1}
   .eval-panel.single-multi-panel{grid-template-columns:250px minmax(0,1fr);grid-template-rows:minmax(0,1fr)}
   .single-multi-panel .insight-panel{display:flex;flex-direction:column;align-items:stretch;justify-content:space-evenly;padding:14px 12px}
   .single-multi-panel .metric-strip{display:flex;flex:1;flex-direction:column;justify-content:space-evenly;gap:10px}
@@ -512,32 +512,10 @@
   </div>
 </section>
 
-<!-- ============ 3. OBIETTIVO E DOMANDE DI RICERCA ============ -->
+<!-- ============ 3. COSTRUZIONE SER: BASE ============ -->
 <section class="slide">
-  <div class="kicker">Cosa vogliamo dimostrare</div>
-  <h2 style="font-size:34px">OBIETTIVO E DOMANDE DI RICERCA</h2>
-  <div class="card" style="border-left:5px solid var(--red);margin-bottom:14px">
-    <p style="font-size:1.5rem"> Dimostrare che un modello SER <strong>allineato alla percezione umana</strong> può fungere da <strong class="accent">giudice autoritativo</strong> della resa emotiva di un utente, all'interno di un loop conversazionale generativo con un Virtual Human.</p>
-  </div>
-  <div class="cols">
-    <div class="col">
-      <div class="pill"> Asse Percettivo</div>
-      <div class="card icard frag grow"><h3><span class="accent">RQ1</span> · Costruzione e Calibrazione</h3><p style="font-size:1.5rem">Il classificatore soft multi-label <strong>approssima la percezione</strong> di una giuria umana?</p></div>
-      <div class="card icard frag grow"><h3><span class="accent">RQ2</span> · Selezione del Modello</h3><p style="font-size:1.5rem">Quale configurazione massimizza l'accuratezza sugli audio <strong>unanimi</strong>?</p></div>
-      <div class="card icard frag grow"><h3><span class="accent">RQ3</span> · Efficacia del loop</h3><p style="font-size:1.5rem">Il ciclo di <strong>valutazione e ripetizione</strong> migliora la resa emotiva in modo misurabile?</p></div>
-    </div>
-    <div class="col">
-      <div class="pill warm"> Asse Esperienziale </div>
-      <div class="card icard frag grow"><h3><span class="goldtx">RQ4</span> · Sicurezza psicologica</h3><p style="font-size:1.5rem">Il giudice virtuale <strong>inibisce o libera</strong> l'espressione dell'emozione richiesta?</p></div>
-      <div class="card icard frag grow"><h3><span class="goldtx">RQ5</span> · Legittimità del verdetto</h3><p style="font-size:1.5rem">A parità di esito, il verdetto del VH è <strong>equo e accettabile</strong> quanto quello umano?</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 4. COSTRUZIONE SER: BASE ============ -->
-<section class="slide">
-  <div class="kicker">Costruzione del SER</div>
-  <h2>Pipeline Sperimentale del LLM</h2>
+  <div class="kicker">La cornice del lavoro</div>
+  <h2>Ingredienti Principali</h2>
   <div class="cols">
     <div class="col">
       <div class="imgbox grow">
@@ -560,6 +538,28 @@
         <div class="stat frag" style="flex:1"><div class="num">7</div><div class="lbl"> emozioni </div></div>
         <div class="stat frag" style="flex:1"><div class="num">≈ 66%</div><div class="lbl">soglia umana vs intended</div></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. OBIETTIVO E DOMANDE DI RICERCA ============ -->
+<section class="slide">
+  <div class="kicker">Cosa vogliamo dimostrare</div>
+  <h2 style="font-size:34px">OBIETTIVO E DOMANDE DI RICERCA</h2>
+  <div class="card" style="border-left:5px solid var(--red);margin-bottom:14px">
+    <p style="font-size:1.5rem"> Dimostrare che un modello SER <strong>allineato alla percezione umana</strong> può fungere da <strong class="accent">giudice autoritativo</strong> della resa emotiva di un utente, all'interno di un loop conversazionale generativo con un Virtual Human.</p>
+  </div>
+  <div class="cols">
+    <div class="col">
+      <div class="pill"> Asse Percettivo</div>
+      <div class="card icard frag grow"><h3><span class="accent">RQ1</span> · Costruzione e Calibrazione</h3><p style="font-size:1.5rem">Il classificatore soft multi-label <strong>approssima la percezione</strong> di una giuria umana?</p></div>
+      <div class="card icard frag grow"><h3><span class="accent">RQ2</span> · Selezione del Modello</h3><p style="font-size:1.5rem">Quale configurazione massimizza l'accuratezza sugli audio <strong>unanimi</strong>?</p></div>
+      <div class="card icard frag grow"><h3><span class="accent">RQ3</span> · Efficacia del loop</h3><p style="font-size:1.5rem">Il ciclo di <strong>valutazione e ripetizione</strong> migliora la resa emotiva in modo misurabile?</p></div>
+    </div>
+    <div class="col">
+      <div class="pill warm"> Asse Esperienziale </div>
+      <div class="card icard frag grow"><h3><span class="goldtx">RQ4</span> · Sicurezza psicologica</h3><p style="font-size:1.5rem">Il giudice virtuale <strong>inibisce o libera</strong> l'espressione dell'emozione richiesta?</p></div>
+      <div class="card icard frag grow"><h3><span class="goldtx">RQ5</span> · Legittimità del verdetto</h3><p style="font-size:1.5rem">A parità di esito, il verdetto del VH è <strong>equo e accettabile</strong> quanto quello umano?</p></div>
     </div>
   </div>
 </section>
@@ -611,11 +611,9 @@
     <div class="analysis-card active" data-eval-card="0"><div class="tag">Selezione</div><div class="hint">test e indici</div></div>
     <div class="analysis-card" data-eval-card="1"><div class="tag">Matrici</div><div class="hint">intended/perceived</div></div>
     <div class="analysis-card" data-eval-card="2"><div class="tag">Consenso</div><div class="hint">strati umani</div></div>
-    <div class="analysis-card" data-eval-card="3"><div class="tag">Similarità</div><div class="hint">similarità</div></div>
   </div>
   <span class="frag eval-trigger" data-eval-index="1"></span>
   <span class="frag eval-trigger" data-eval-index="2"></span>
-  <span class="frag eval-trigger" data-eval-index="3"></span>
 
   <div class="analysis-body">
     <div class="eval-panel model-table-panel current" data-eval-panel="0">
@@ -659,21 +657,6 @@
         <div class="mini-compare">
           <div class="metric"><strong>91,6%</strong><span>consenso 5/5</span></div>
           <div class="metric"><strong>0,824</strong><span>cosine media</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="eval-panel info-column" data-eval-panel="3">
-      <div class="analysis-media focus-media">
-        <img src="img/cosine_corpus_crop.png" alt="Distribuzione della cosine similarity per audio">
-      </div>
-      <div class="insight-panel model-insight">
-        <div>
-          <div class="panel-kicker" style="font-size: 1rem !important;">Similarità distribuzionale</div>
-        </div>
-        <div class="mini-compare">
-          <div class="metric"><strong>0,903</strong><span>mediana</span></div>
-          <div class="metric"><strong>0,824</strong><span>media</span></div>
         </div>
       </div>
     </div>
@@ -746,44 +729,19 @@
   <div class="kicker">Risultati — valutazioni</div>
   <h2>Analisi Valutazioni</h2>
   <div class="analysis-tabs">
-    <div class="analysis-card active" data-eval-card="0"><div class="tag">Consenso</div><div class="hint">ambiguità dei rater</div></div>
-    <div class="analysis-card" data-eval-card="1"><div class="tag">Similarità</div><div class="hint">vicinanza al perceived</div></div>
-    <div class="analysis-card" data-eval-card="2"><div class="tag">Single vs Multi Label</div><div class="hint">argmax e set</div></div>
-    <div class="analysis-card" data-eval-card="3"><div class="tag">Miglioramento</div><div class="hint">tentativi successivi</div></div>
+    <div class="analysis-card active" data-eval-card="0"><div class="tag">Similarità</div><div class="hint">vicinanza al perceived</div></div>
+    <div class="analysis-card" data-eval-card="1"><div class="tag">Single vs Multi Label</div><div class="hint">argmax e set</div></div>
+    <div class="analysis-card" data-eval-card="2"><div class="tag">Miglioramento</div><div class="hint">tentativi successivi</div></div>
   </div>
   <span class="frag eval-trigger" data-eval-index="1"></span>
+  <span class="frag eval-trigger" data-eval-index="1" data-zoom="1"></span>
   <span class="frag eval-trigger" data-eval-index="2"></span>
-  <span class="frag eval-trigger" data-eval-index="2" data-zoom="1"></span>
-  <span class="frag eval-trigger" data-eval-index="3"></span>
 
   <div class="analysis-body">
-    <div class="eval-panel two-col info-column current" data-eval-panel="0">
-      <div class="analysis-chart-frame">
-        <div class="chart-wrap"><canvas id="demoConsensusChart"></canvas></div>
-      </div>
-      <div class="insight-panel" style="justify-content: center; border: none; background-color: transparent;">
-        <div>
-          <div class="panel-kicker">Consenso umano</div>
-          <div class="panel-title-small">Ambiguità maggiore del materiale</div>
-        </div>
-        <div class="metric-strip">
-          <div class="metric"><strong>956</strong><span>audio della demo</span></div>
-          <div class="metric"><strong>0,48→0,37</strong><span>Krippendorff α</span></div>
-          <div class="metric"><strong>168</strong><span>audio 5/5</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="eval-panel wide-top similarity-row" data-eval-panel="1">
-      <div class="image-pair">
-        <div class="analysis-media focus-media">
-          <img src="img/consenso_demo_crop.png" alt="Accuracy e cosine similarity per strato di consenso, demo">
-          <div class="cap">Più i rater concordano, più l'argmax del classificatore resta allineato.</div>
-        </div>
-        <div class="analysis-media focus-media">
-          <img src="img/similarity_crop.png" alt="Distribuzione della cosine similarity tra score e distribuzione voti">
-          <div class="cap">La distribuzione della cosine similarity resta concentrata nella parte alta.</div>
-        </div>
+    <div class="eval-panel wide-top similarity-row current" data-eval-panel="0">
+      <div class="analysis-media focus-media">
+        <img src="img/consenso_demo_crop.png" alt="Accuracy e cosine similarity per strato di consenso, demo">
+        <div class="cap">Più i rater concordano, più l'argmax del classificatore resta allineato.</div>
       </div>
       <div class="insight-panel">
         <div class="mini-compare">
@@ -794,7 +752,7 @@
       </div>
     </div>
 
-    <div class="eval-panel single-multi-panel" data-eval-panel="2">
+    <div class="eval-panel single-multi-panel" data-eval-panel="1">
       <div class="insight-panel">
         <div>
           <div class="panel-kicker" style="text-align: center;">Single vs Multi</div>
@@ -818,7 +776,7 @@
       </div>
     </div>
 
-    <div class="eval-panel wide-top" data-eval-panel="3">
+    <div class="eval-panel wide-top" data-eval-panel="2">
       <div class="analysis-media">
         <img src="img/curve_media.png" alt="Curve di miglioramento medie per rater e classificatore">
         <div class="cap">Rater umani e classificatore mostrano la stessa direzione di crescita (Due scale differenti).</div>
