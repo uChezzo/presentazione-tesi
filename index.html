@@ -281,12 +281,11 @@
   /* scattered images (step "modello emotivo") */
   .scatter{position:relative;flex:1;min-height:0}
   .scatter .sc{position:absolute;filter:drop-shadow(0 7px 16px rgba(90,50,20,.18));border-radius:8px}
-  .scatter .sc-ekman{width:42%;top:9%;left:0;transform:rotate(-3deg)}
-  .scatter .sc-big5{width:35%;top:5%;right:0;transform:rotate(4deg)}
-  .scatter .sc-plut{width:70%;bottom:2%;left:13%;transform:rotate(-1.5deg)}
+  .scatter .sc-ekman{width:80%;top:9%;left:40%;transform:translateX(-50%) rotate(-2deg)}
+  .scatter .sc-plut{width:62%;bottom:3%;left:80%;transform:translateX(-50%) rotate(-1.5deg)}
   .sc-tag{position:absolute;z-index:6;font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;padding:3px 13px;border-radius:999px;box-shadow:var(--shadow)}
   .sc-tag-cat{background:var(--red-soft);color:var(--red);top:0;left:50%;transform:translateX(-50%)}
-  .sc-tag-cont{background:var(--gold-soft);color:var(--gold);bottom:0;left:0}
+  .sc-tag-cont{background:var(--gold-soft);color:var(--gold);top:87%;left:30%;transform:translateX(-50%)}
 
   /* channel grid (step "canali emotivi") — 3 sopra, 2 sotto */
   .channel-grid{display:flex;flex-direction:column;gap:12px;flex:1;min-height:0;margin-top:2px}
@@ -353,6 +352,21 @@
   .single-multi-panel .image-pair{transition:grid-template-columns .6s var(--ease-out)}
   .single-multi-panel.current .image-pair{grid-template-columns:3fr 1fr}
   .single-multi-panel.current.zoom-second .image-pair{grid-template-columns:1fr 3fr}
+  /* indici e delta seguono la matrice ingrandita: single all'ingresso, multi al click */
+  .single-multi-panel .sm-multi{display:none}
+  .single-multi-panel.zoom-second .sm-single{display:none}
+  .single-multi-panel.zoom-second .sm-multi{display:inline}
+  /* blocchi accuratezza: SINGLE (vs perceived / vs intended) sopra, MULTI sotto */
+  .acc-blocks{display:flex;flex-direction:column;gap:8px;flex:1;justify-content:space-evenly}
+  .acc-block{border-radius:10px;padding:6px 5px;transition:background .3s var(--ease-out)}
+  .acc-block-title{font-size:11px;font-weight:700;color:var(--ink);margin-bottom:4px;text-align:center}
+  .acc-block-metrics{display:flex;gap:6px}
+  .acc-block-metrics .metric{padding:6px 4px}
+  .acc-block-metrics .metric strong{font-size:16px}
+  .acc-block-metrics .metric span{font-size:9px}
+  /* blocco evidenziato = matrice ingrandita: single all'ingresso, multi al click */
+  .single-multi-panel:not(.zoom-second) .acc-block-single{background:var(--gold-soft)}
+  .single-multi-panel.zoom-second .acc-block-multi{background:var(--gold-soft)}
   .gain-badge{background:var(--red-soft);border:1px solid rgba(158,27,40,.18);border-left:5px solid var(--red);border-radius:12px;padding:11px 13px}
   .gain-badge h3{font-size:16px;color:var(--red);margin-bottom:3px}
   .gain-badge p{font-size:13.2px;line-height:1.35}
@@ -485,7 +499,6 @@
           <div class="scatter">
             <span class="sc-tag sc-tag-cat">Categoriale</span>
             <img class="sc sc-ekman" src="img/big6_emotions.png" alt="Le sei emozioni di base di Ekman">
-            <img class="sc sc-big5" src="img/big_five_nobg.png" alt="I cinque tratti di personalità Big Five">
             <span class="sc-tag sc-tag-cont">Continuo</span>
             <img class="sc sc-plut" src="img/plutchik_pad_nobg.png" alt="Modelli dimensionali VA e PAD delle emozioni">
           </div>
@@ -498,7 +511,7 @@
             <div class="crow">
               <div class="tile chan"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2a2.4 2.4 0 1 0 2.4 2.4A2.4 2.4 0 0 0 12 2Zm2 5.5h-4A2 2 0 0 0 8 9.5V15h2v7h4v-7h2V9.5a2 2 0 0 0-2-2Z"/></svg></div><h3>Posa</h3><p>postura e prossemica</p></div>
               <div class="tile chan"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm-3.5 7A1.5 1.5 0 1 1 7 10.5 1.5 1.5 0 0 1 8.5 9Zm7 0A1.5 1.5 0 1 1 14 10.5 1.5 1.5 0 0 1 15.5 9ZM12 17.5A5.5 5.5 0 0 1 6.8 14h10.4a5.5 5.5 0 0 1-5.2 3.5Z"/></svg></div><h3>Volto</h3><p>espressività facciale</p></div>
-              <div class="tile chan"><div class="ico"><svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2ZM7 9h10v2H7Zm0 4h7v2H7Z"/></svg></div><h3>Testo</h3><p>contenuto verbale</p></div>
+              <div class="tile chan"><div class="ico"><svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2ZM7 9h10v2H7Zm0 4h7v2H7Z"/></svg></div><h3>Testo</h3><p>contenuto semantico</p></div>
             </div>
             <div class="crow">
               <div class="tile chan"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 12.5h3.5l1.5-3.5 2.5 7 2-9 2 5.5 1.3-2.5H21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Dati biometrici</h3><p>battito, sudorazione</p></div>
@@ -523,20 +536,19 @@
         <img src="img/wav2vec_schema.png" alt="Architettura wav2vec 2.0" style="flex:1 1 0;min-height:0;max-width:100%;object-fit:contain">
       </div>
       <div class="cols" style="flex:0 0 auto;gap:10px">
-        <div class="stat frag" style="flex:1"><div class="num" style="font-size:17px">PAD</div><div class="lbl">modello continuo</div></div>
-        <div class="stat frag" style="flex:1"><div class="num" style="font-size:17px">ONNX</div><div class="lbl">inferenza in tempo reale</div></div>
-        <div class="stat frag" style="flex:1"><div class="num" style="font-size:17px">2048</div><div class="lbl">feature · pooling mean+std</div></div>
+        <div class="stat" style="flex:1"><div class="num" style="font-size:17px">PAD</div><div class="lbl">modello continuo</div></div>
+        <div class="stat" style="flex:1"><div class="num" style="font-size:17px">2048</div><div class="lbl">feature · pooling mean+std</div></div>
       </div>
     </div>
     <div class="col">
-      <div class="imgbox grow">
+      <div class="imgbox grow frag" data-seq="0">
         <div class="panel-title"><div class="num">Corpus Emozionalmente</div></div>
         <div class="chart-wrap"><canvas id="corpusChart"></canvas></div>
       </div>
       <div class="cols" style="flex:0 0 auto;gap:10px">
-        <div class="stat frag" style="flex:1"><div class="num">6 902</div><div class="lbl">audio recitati</div></div>
-        <div class="stat frag" style="flex:1"><div class="num">7</div><div class="lbl"> emozioni </div></div>
-        <div class="stat frag" style="flex:1"><div class="num">≈ 66%</div><div class="lbl">soglia umana vs intended</div></div>
+        <div class="stat frag" data-seq="1" style="flex:1"><div class="num">6 902</div><div class="lbl">audio recitati</div></div>
+        <div class="stat frag" data-seq="2" style="flex:1"><div class="num">7</div><div class="lbl"> emozioni </div></div>
+        <div class="stat frag" data-seq="3" style="flex:1"><div class="num">≈ 66%</div><div class="lbl">soglia umana vs intended</div></div>
       </div>
     </div>
   </div>
@@ -547,12 +559,12 @@
   <div class="kicker">Cosa vogliamo dimostrare</div>
   <h2 style="font-size:34px">OBIETTIVO E DOMANDE DI RICERCA</h2>
   <div class="card" style="border-left:5px solid var(--red);margin-bottom:14px">
-    <p style="font-size:1.5rem"> Dimostrare che un modello SER <strong>allineato alla percezione umana</strong> può fungere da <strong class="accent">giudice autoritativo</strong> della resa emotiva di un utente, all'interno di un loop conversazionale generativo con un Virtual Human.</p>
+    <p style="font-size:1.5rem"> Dimostrare che un modello SER <strong>allineato alla percezione umana</strong> può fungere da <strong class="accent">giudice autoritativo</strong> della resa emotiva di un utente, all'interno di un loop conversazionale con un Virtual Human.</p>
   </div>
   <div class="cols">
     <div class="col">
       <div class="pill"> Asse Percettivo</div>
-      <div class="card icard frag grow"><h3><span class="accent">RQ1</span> · Costruzione e Calibrazione</h3><p style="font-size:1.5rem">Il classificatore soft multi-label <strong>approssima la percezione</strong> di una giuria umana?</p></div>
+      <div class="card icard frag grow"><h3><span class="accent">RQ1</span> · Costruzione e Calibrazione</h3><p style="font-size:1.5rem">In che misura il modello <strong>approssima la percezione</strong> di una giuria umana?</p></div>
       <div class="card icard frag grow"><h3><span class="accent">RQ2</span> · Selezione del Modello</h3><p style="font-size:1.5rem">Quale configurazione massimizza l'accuratezza sugli audio <strong>unanimi</strong>?</p></div>
       <div class="card icard frag grow"><h3><span class="accent">RQ3</span> · Efficacia del loop</h3><p style="font-size:1.5rem">Il ciclo di <strong>valutazione e ripetizione</strong> migliora la resa emotiva in modo misurabile?</p></div>
     </div>
@@ -575,13 +587,11 @@
         <img src="img/svm_rbf.png" alt="Kernel trick: dati non separabili linearmente proiettati in uno spazio dove un piano li separa" style="flex:0 0 auto;width:100%;max-width:400px;height:auto">
         <div class="cap">Il <b>kernel trick</b>: i dati vengono proiettati in uno spazio a dimensione superiore, dove la superficie di decisione diventa un semplice piano</div>
       </div>
-      <ul class="clean grow" style="display:flex;flex-direction:column;justify-content:space-evenly;margin-top:2px; font-size:1.5rem">
-        <li style="font-size:1.5rem"><strong>SVC</strong> (scikit-learn) — calssificazione <strong>Soft Label</strong> </li>
-        <li style="font-size:1.5rem"><strong>Kernel RBF</strong> — confine <strong>non lineare</strong></li>
-        <li style="font-size:1.5rem"><strong>One-vs-Rest</strong> — 7 classificatori binari indipendenti</li>
-        <li style="font-size:1.5rem"><strong>Calibrazione sigmoide</strong> (Platt scaling, CalibratedClassifierCV)</li>
-        <li style="font-size:1.5rem"><strong>GroupKFold sul parlante</strong> + nested CV </li>
-      </ul>
+      <div class="col grow" style="gap:11px;justify-content:space-evenly;margin-top:2px">
+        <div class="stat" style="flex:1"><div class="num" style="font-size:22px">One-vs-Rest</div><div class="lbl">7 classificatori binari indipendenti</div></div>
+        <div class="stat" style="flex:1"><div class="num" style="font-size:22px">Cross-Validation</div></div>
+        <div class="stat" style="flex:1"><div class="num" style="font-size:22px">Classificazione Soft Label</div></div>
+      </div>
     </div>
     <div class="col" style="flex:1.3;gap:11px">
       <div class="frag" style="display:flex;flex-direction:column;gap:11px;flex:0 0 auto">
@@ -595,6 +605,7 @@
         </div>
       </div>
       <div class="frag reveal-rules col" style="gap:8px;flex:1;justify-content:space-evenly">
+        <div class="subhead">Regola dei positivi</div>
         <div class="rule"><div class="nm">Dominanza relativa</div><div class="fx">intended ∨ (voti<sub>c</sub> ≥ 2 ∧ voti<sub>c</sub> ≥ top − 1)</div></div>
         <div class="rule win"><div class="nm">Rapporto di dominanza ✓</div><div class="fx">intended ∨ (voti<sub>c</sub> ≥ 2 ∧ voti<sub>c</sub> ≥ top)</div></div>
         <div class="rule"><div class="nm">Unanimità (5/5)</div><div class="fx">intended ∧ voti<sub>c</sub> = 5</div></div>
@@ -606,9 +617,9 @@
 <!-- ============ 6. SCELTA E VALUTAZIONE DEL MODELLO ============ -->
 <section class="slide analysis-slide model-slide" data-analysis-slide>
   <div class="kicker">Costruzione del SER</div>
-  <h2>Scelta e valutazione del modello</h2>
+  <h2>Scelta e valutazione del modello  - RQ2 </h2>
   <div class="analysis-tabs">
-    <div class="analysis-card active" data-eval-card="0"><div class="tag">Selezione</div><div class="hint">test e indici</div></div>
+    <div class="analysis-card active" data-eval-card="0"><div class="tag">Selezione - RQ2 </div><div class="hint">test e indici</div></div>
     <div class="analysis-card" data-eval-card="1"><div class="tag">Matrici</div><div class="hint">intended/perceived</div></div>
     <div class="analysis-card" data-eval-card="2"><div class="tag">Consenso</div><div class="hint">strati umani</div></div>
   </div>
@@ -670,7 +681,7 @@
   <div class="serena-layout">
     <div class="serena-visuals" style="justify-content: center;">
       <div>
-        <div class="cap">Marta, coordinatrice di casting</div>
+        <div class="cap">Serena, coordinatrice di casting</div>
         <img class="marta-view" src="img/marta_saluto.png" alt="Marta, coordinatrice di casting">
       </div>
       <div class="ingredient-list">
@@ -729,9 +740,9 @@
   <div class="kicker">Risultati — valutazioni</div>
   <h2>Analisi Valutazioni</h2>
   <div class="analysis-tabs">
-    <div class="analysis-card active" data-eval-card="0"><div class="tag">Similarità</div><div class="hint">vicinanza al perceived</div></div>
+    <div class="analysis-card active" data-eval-card="0"><div class="tag">Consenso - RQ1</div><div class="hint">vicinanza al perceived</div></div>
     <div class="analysis-card" data-eval-card="1"><div class="tag">Single vs Multi Label</div><div class="hint">argmax e set</div></div>
-    <div class="analysis-card" data-eval-card="2"><div class="tag">Miglioramento</div><div class="hint">tentativi successivi</div></div>
+    <div class="analysis-card" data-eval-card="2"><div class="tag">Miglioramento - RQ3</div><div class="hint">tentativi successivi</div></div>
   </div>
   <span class="frag eval-trigger" data-eval-index="1"></span>
   <span class="frag eval-trigger" data-eval-index="1" data-zoom="1"></span>
@@ -743,11 +754,26 @@
         <img src="img/consenso_demo_crop.png" alt="Accuracy e cosine similarity per strato di consenso, demo">
         <div class="cap">Più i rater concordano, più l'argmax del classificatore resta allineato.</div>
       </div>
-      <div class="insight-panel">
-        <div class="mini-compare">
-          <div class="metric"><strong>57,2%</strong><span>acc. vs perceived</span></div>
-          <div class="metric"><strong>48,4%</strong><span>acc. vs intended</span></div>
+      <div class="insight-panel" style="gap:6px">
+        <div class="panel-kicker">Strati di consenso</div>
+        <div class="mini-compare" style="flex:0 0 auto">
+          <div class="metric"><strong>74,4%</strong><span>consenso 5/5</span></div>
           <div class="metric"><strong>0,69</strong><span>cosine media</span></div>
+        </div>
+        <div class="panel-kicker" style="margin-top:0">Δ vs Corpus</div>
+        <div class="col" style="gap:3px;flex:0 0 auto">
+          <div class="rule" style="padding:2px 10px;gap:1px">
+            <div class="nm" style="white-space:nowrap">Acc. 5/5</div>
+            <div class="fx" style="white-space:nowrap">91,6% → 74,4%</div>
+          </div>
+          <div class="rule" style="padding:2px 10px;gap:1px">
+            <div class="nm" style="white-space:nowrap">Cosine media</div>
+            <div class="fx" style="white-space:nowrap">0,824 → 0,69</div>
+          </div>
+          <div class="rule" style="padding:2px 10px;gap:1px">
+            <div class="nm" style="white-space:nowrap">Soglia umana</div>
+            <div class="fx" style="white-space:nowrap">66% → 43,4%</div>
+          </div>
         </div>
       </div>
     </div>
@@ -755,23 +781,39 @@
     <div class="eval-panel single-multi-panel" data-eval-panel="1">
       <div class="insight-panel">
         <div>
-          <div class="panel-kicker" style="text-align: center;">Single vs Multi</div>
-          <div class="panel-title-small" style="text-align: center;">Argmax su </br> Majority ≥ 3 </div>
+          <div class="panel-kicker" style="text-align:center">Single vs Multi</div>
+          <div class="panel-title-small" style="text-align:center">
+            <span class="sm-single">Single-label </br> argmax</span><span class="sm-multi">Multi-label </br> set ≥ soglia</span>
+          </div>
         </div>
-        <div class="metric-strip">
-          <div class="metric"><strong>75,6%</strong><span>corpus perceived</span></div>
-          <div class="metric"><strong>57,2%</strong><span>demo perceived single</span></div>
-          <div class="metric"><strong>58,4%</strong><span>demo perceived multi</span></div>
+        <div>
+          <div class="panel-kicker" style="text-align:center;margin-bottom:6px">Accuratezza</div>
+          <div class="acc-blocks">
+            <div class="acc-block acc-block-single">
+              <div class="acc-block-title">Single-label</div>
+              <div class="acc-block-metrics">
+                <div class="metric"><strong>56,8%</strong><span>perceived<br></span></div>
+                <div class="metric"><strong>48,7%</strong><span>intended</span></div>
+              </div>
+            </div>
+            <div class="acc-block acc-block-multi">
+              <div class="acc-block-title">Multi-label</div>
+              <div class="acc-block-metrics">
+                <div class="metric"><strong>58,8%</strong><span>perceived<br></span></div>
+                <div class="metric"><strong>50,3%</strong><span>intended</span></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="image-pair">
         <div class="analysis-media focus-media">
           <img src="img/CM_max_3_5.png" alt="Matrice di confusione single-label">
-          <div class="cap">Single-label: una previsione per audio, accuratezza 57,2%.</div>
+          <div class="cap">Single-label: una previsione per audio, accuratezza 56,8% (416/733).</div>
         </div>
         <div class="analysis-media">
           <img src="img/cm_multilabel.png" alt="Matrice di confusione multi-label">
-          <div class="cap">Multi-label: set sopra soglia, accuratezza 58,4%.</div>
+          <div class="cap">Multi-label: set sopra soglia, accuratezza 58,8% (431/733).</div>
         </div>
       </div>
     </div>
@@ -789,7 +831,7 @@
         <div class="mini-compare">
           <div class="metric"><strong>24%→40%</strong><span>rater umani</span></div>
           <div class="metric"><strong>+16</strong><span>punti medi</span></div>
-          <div class="metric"><strong>135+123</strong><span>osservazioni appaiate</span></div>
+          <div class="metric"><strong>135+123</strong><span>osservazioni</span></div>
         </div>
       </div>
     </div>
@@ -863,7 +905,7 @@
   <h2>Risposte alle RQ e Sviluppi Futuri</h2>
   <div class="closing-layout">
     <div class="rq-column" style="justify-content: space-around;">
-      <div class="rq-answer"><h3><span class="accent">RQ1 ✓</span> Approssima la giuria</h3><p>75,6% vs perceived, cosine 0,82; sul campo scende di 17,3 punti confrontata al 48% della giuria umana.</p></div>
+      <div class="rq-answer"><h3><span class="accent">RQ1 ✓</span> Approssima la giuria</h3><p>75,6% vs perceived, cosine 0,82; sul campo scende di 17,3 punti confrontata al 43% della giuria umana.</p></div>
       <div class="rq-answer"><h3><span class="accent">RQ2 ✓</span> Rapporto di Dominanza</h3><p>Con α = 0,2 e C = 10: consenso 5/5 al 91,6%. La regola pesa più del tuning.</p></div>
       <div class="rq-answer"><h3><span class="accent">RQ3 ✓</span> Il loop migliora</h3><p>Rater e classificatore crescono nella stessa direzione: </br> 24% → 40% nel gruppo a 3 tentativi.</p></div>
       <div class="rq-answer"><h3><span class="goldtx">RQ4 ✓</span> Nessuna inibizione</h3><p>Sicurezza psicologica e tensione lievemente milgiori nell'interazione con il Vitual Human</p></div>
